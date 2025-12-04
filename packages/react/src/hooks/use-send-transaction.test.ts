@@ -36,13 +36,13 @@ describe.skip("useSendTransaction", () => {
     const { result } = renderHook(() => useSendTransactionWithConnect());
 
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
     await act(async () => {
-      result.current.sendTransaction.send();
+      await result.current.sendTransaction.sendAsync();
     });
 
     await waitFor(() => {
@@ -55,13 +55,13 @@ describe.skip("useSendTransaction", () => {
       connectorOptions: { rejectRequest: true },
     });
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
     await act(async () => {
-      result.current.sendTransaction.send();
+      await result.current.sendTransaction.sendAsync();
     });
 
     await waitFor(() => {

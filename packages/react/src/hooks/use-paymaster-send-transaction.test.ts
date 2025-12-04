@@ -51,6 +51,10 @@ describe.skip("useSendTransaction", () => {
       });
     });
 
+    await waitFor(() => {
+      expect(result.current.connect.connector).toBeDefined();
+    });
+
     await act(async () => {
       result.current.sendTransaction.sendAsync();
     });
@@ -68,13 +72,13 @@ describe.skip("useSendTransaction", () => {
       },
     );
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
     await act(async () => {
-      result.current.sendTransaction.sendAsync();
+      await result.current.sendTransaction.sendAsync();
     });
 
     await waitFor(() => {

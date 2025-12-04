@@ -47,14 +47,14 @@ describe.skip("usePaymasterEstimateFees", () => {
     const { result } = renderHook(() => usePaymasterEstimateFeesWithConnect());
 
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
     // Wait for the account to be initialized
     await waitFor(() => {
-      expect(result.current.connect.isSuccess).toBeTruthy();
+      expect(result.current.connect.connector).toBeTruthy();
     });
 
     await waitFor(() => {

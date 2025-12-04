@@ -51,13 +51,13 @@ describe.skip("useDeclareContract", () => {
     const { result } = renderHook(() => useDeclareContractWithConnect());
 
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
     await act(async () => {
-      result.current.declare.declare();
+      await result.current.declare.declareAsync();
     });
 
     await waitFor(() => {
@@ -70,12 +70,12 @@ describe.skip("useDeclareContract", () => {
       connectorOptions: { rejectRequest: true },
     });
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
     await act(async () => {
-      result.current.declare.declare();
+      await result.current.declare.declareAsync();
     });
     await waitFor(() => {
       expect(result.current.declare.isError).toBeTruthy();
