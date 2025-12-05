@@ -6,4 +6,7 @@ packages:
   - packages/query
   - packages/react
   # - packages/vue
-  # - docs
+  - docs
+
+onlyBuiltDependencies:
+  - esbuild
