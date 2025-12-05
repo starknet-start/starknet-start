@@ -3,14 +3,13 @@ import {
   deployAccountMutationFn,
   deployAccountMutationKey,
 } from "@starknet-start/query";
+import { useStarknetAccount } from "src/context/account";
 import type { DeployContractResponse } from "starknet";
 import {
   type UseMutationProps,
   type UseMutationResult,
   useMutation,
 } from "../query";
-
-import { useAccount } from "./use-account";
 
 export type { DeployAccountVariables };
 
@@ -49,7 +48,7 @@ export function useDeployAccount({
   options,
   ...props
 }: UseDeployAccountProps): UseDeployAccountResult {
-  const { account } = useAccount();
+  const { account } = useStarknetAccount();
   const { mutate, mutateAsync, ...result } = useMutation({
     mutationKey: deployAccountMutationKey({
       account,

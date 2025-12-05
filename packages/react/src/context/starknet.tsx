@@ -56,7 +56,8 @@ export type StarknetState = Simplify<
 const StarknetContext = createContext<StarknetState | undefined>(undefined);
 
 export type StarknetProviderProps = Simplify<
-  StarknetProviderInnerProps & GetStarknetProviderProps
+  StarknetProviderInnerProps &
+    Omit<GetStarknetProviderProps, "children"> & { children?: React.ReactNode }
 >;
 
 type StarknetProviderInnerProps = {

@@ -22,6 +22,11 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
+    },
+    "./get-starknet": {
+      "types": "./dist/get-starknet/index.d.mts",
+      "import": "./dist/get-starknet/index.mjs",
+      "default": "./dist/get-starknet/index.mjs"
     }
   },
   "scripts": {
@@ -58,8 +63,8 @@
     "rimraf": "^4.1.2",
     "starknet": "^8.9.1",
     "tsdown": "^0.16.8",
-    "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^1.6.1"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.15"
   },
   "dependencies": {
     "@starknet-io/types-js": "^0.7.10",

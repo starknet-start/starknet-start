@@ -3,6 +3,7 @@ import {
   paymasterSendTransactionMutationKey,
 } from "@starknet-start/query";
 import { useCallback } from "react";
+import { useStarknetAccount } from "src/context/account";
 import type {
   BigNumberish,
   Call,
@@ -10,7 +11,6 @@ import type {
   PaymasterDetails,
 } from "starknet";
 import { type UseMutationResult, useMutation } from "../query";
-import { useAccount } from "./use-account";
 
 export type UsePaymasterSendTransactionArgs = {
   /** List of smart contract calls to execute. */
@@ -35,7 +35,7 @@ export function usePaymasterSendTransaction(
   props: UsePaymasterSendTransactionArgs,
 ): UsePaymasterSendTransactionResult {
   const { calls, options, maxFeeInGasToken, ...rest } = props;
-  const { account } = useAccount();
+  const { account } = useStarknetAccount();
 
   const { mutate, mutateAsync, ...result } = useMutation<
     InvokeFunctionResponse,
