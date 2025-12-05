@@ -14,19 +14,19 @@ Starknet React.
 ### Public
 
 Starknet React ships with a public provider that you can use to run **Gasless** transactions.
-For any project that needs **Gasfree** transaction, you should configure an *api key* to one
+For any project that needs **Gasfree** transaction, you should configure an _api key_ to one
 of the providers below.
 
 At the moment, this provider uses the free Paymaster RPC endpoints provided by:
 
- - AVNU
+- AVNU
 
 ### AVNU
 
 Create an AVNU API key from the dashboard(soon available - contact AVNU team until available).
 
 ```ts twoslash
-import { avnuPaymasterProvider } from "@starknet-react/core";
+import { avnuPaymasterProvider } from "@starknet-start/providers/paymaster";
 
 const apiKey = "your-api-key";
 const provider = avnuPaymasterProvider({ apiKey });

@@ -1,4 +1,5 @@
 import { useAccount } from "@starknet-start/react";
+import { StarknetWalletApi } from "@starknet-start/react/get-starknet";
 import stringify from "safe-stable-stringify";
 import { DemoContainer } from "../starknet";
 
@@ -11,7 +12,7 @@ export function Account() {
 }
 
 function AccountInner() {
-  const { address, connector, account } = useAccount();
+  const { address, connector } = useAccount();
 
   return (
     <div className="flex flex-col gap-4">
@@ -19,8 +20,9 @@ function AccountInner() {
         {stringify(
           {
             address: address ?? "Connect wallet first",
-            connector: connector?.id ?? "Connect wallet first",
-            account: account ? typeof account : "Connect wallet first",
+            connector:
+              connector?.features[StarknetWalletApi].id ??
+              "Connect wallet first",
           },
           null,
           2,

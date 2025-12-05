@@ -45,35 +45,17 @@ of recommended connectors with a dynamic list of injected connectors.
 
 ```tsx [components/starknet-provider.tsx]
 "use client";
-import React from "react";
-
-import { sepolia, mainnet } from "@starknet-react/chains";
-import {
-  StarknetConfig,
-  publicProvider,
-  ready,
-  braavos,
-  useInjectedConnectors,
-  voyager,
-} from "@starknet-react/core";
+import { mainnet, sepolia } from "@starknet-start/chains";
+import { publicProvider } from "@starknet-start/providers";
+import { StarknetConfig } from "@starknet-start/react";
 
 export function StarknetProvider({ children }: { children: React.ReactNode }) {
-  const { connectors } = useInjectedConnectors({
-    // Show these connectors if the user has no connector installed.
-    recommended: [ready(), braavos()],
-    // Hide recommended connectors if the user has any connector installed.
-    includeRecommended: "onlyIfNoConnectors",
-    // Randomize the order of the connectors.
-    order: "random",
-  });
+  const chains = [sepolia, mainnet];
+
+  const provider = publicProvider();
 
   return (
-    <StarknetConfig
-      chains={[mainnet, sepolia]}
-      provider={publicProvider()}
-      connectors={connectors}
-      explorer={voyager}
-    >
+    <StarknetConfig chains={chains} provider={provider}>
       {children}
     </StarknetConfig>
   );
@@ -139,7 +121,8 @@ pnpm i @cartridge/connector
 
 :::
 
-```tsx twoslash
+```tsx
+// TODO: This Code has to be updated as per get-starknet standards.
 "use client";
 import React, { useCallback } from "react";
 

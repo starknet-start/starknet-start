@@ -15,7 +15,7 @@ import {
   useContract,
   useNetwork,
   useAccount,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import type { Abi } from "starknet";
 
 const abi = [
@@ -39,13 +39,16 @@ const abi = [
 
 const { address } = useAccount();
 const { chain } = useNetwork();
-const { contract } = useContract({ // [!code focus]
+const { contract } = useContract({
+  // [!code focus]
   abi, // [!code focus]
   address: chain.nativeCurrency.address, // [!code focus]
 }); // [!code focus]
 
-const { send, error } = useSendTransaction({ // [!code focus]
-  calls: // [!code focus]
+const { send, error } = useSendTransaction({
+  // [!code focus]
+  // [!code focus]
+  calls:
     contract && address // [!code focus]
       ? [contract.populate("transfer", [address, 1n])] // [!code focus]
       : undefined, // [!code focus]

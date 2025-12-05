@@ -15,26 +15,20 @@ type of wallets are also known as _"browser wallets"_.
 
 Configure a new injected wallet with the following properties:
 
- - `id` (required): unique wallet id, used when injecting the wallet in the web page.
- - `name` (optional): human friendly name.
- - `icon` (optional): wallet icons, for both light and dark mode. Icons should be base 64
-   encoded svg images that developers can use as `src` properties on an `img`
-   HTML tag.
-
-### `useInjectedConnectors`
-
-Starknet React provides the `useInjectedConnectors` hook to discover injected
-wallets automatically. You can read more about this hook [in the
-documentation](/docs/hooks/use-injected-connectors).
+- `id` (required): unique wallet id, used when injecting the wallet in the web page.
+- `name` (optional): human friendly name.
+- `icon` (optional): wallet icons, for both light and dark mode. Icons should be base 64
+  encoded svg images that developers can use as `src` properties on an `img`
+  HTML tag.
 
 ### Injected
 
-This helper is useful to create a new connector with the provided id.
+This helper is useful to create a new connector with the provided `StarknetWindowObject`
 
-```tsx twoslash
-import { injected } from "@starknet-react/core";
+```tsx
+import { StarknetInjectedWallet } from "@starknet-start/react/get-starknet";
 
-const connector = injected({ id: "my-wallet" });
+const connector = new StarknetInjectedWallet(window.starknet_myWallet);
 ```
 
 ### Ready Wallet (formerly Argent X)
@@ -42,11 +36,9 @@ const connector = injected({ id: "my-wallet" });
 The Ready Wallet (formerly Argent X) wallet is supported out of the box.
 
 ```tsx twoslash
-import { ready } from "@starknet-react/core";
+import { readyWallet } from "@starknet-io/get-starknet-core/wallets";
 
-const connectors = [
-  ready()
-];
+const wallets = [readyWallet];
 ```
 
 ### Braavos
@@ -54,11 +46,9 @@ const connectors = [
 The Braavos wallet is supported out of the box.
 
 ```tsx twoslash
-import { braavos } from "@starknet-react/core";
+import { braavos } from "@starknet-io/get-starknet-core/wallets";
 
-const connectors = [
-  braavos()
-];
+const wallets = [braavos];
 ```
 
 ### Cartridge Controller
@@ -72,9 +62,10 @@ The Controller enables seamless use of Session Keys.
 pnpm i @cartridge/connector @cartridge/controller
 ```
 
-```tsx twoslash
+```tsx
+// TODO: This Code has to be updated as per get-starknet standards.
 import { ControllerConnector } from "@cartridge/connector";
-import { Connector } from "@starknet-react/core";
+import { Connector } from "@starknet-start/react";
 import { constants } from "starknet";
 
 // Without Session Keys
@@ -93,11 +84,11 @@ const connectors = [
 ];
 ```
 
-
-```tsx twoslash
+```tsx
+// TODO: This Code has to be updated as per get-starknet standards.
 import { ControllerConnector } from "@cartridge/connector";
 import { SessionPolicies } from "@cartridge/controller";
-import { Connector } from "@starknet-react/core";
+import { Connector } from "@starknet-start/react";
 import { constants } from "starknet";
 
 // Define session policies
@@ -110,11 +101,11 @@ const policies: SessionPolicies = {
         {
           name: "Create",
           description: "Create a new instance",
-          entrypoint: "create"
-        }
-      ]
-    }
-  }
+          entrypoint: "create",
+        },
+      ],
+    },
+  },
 };
 
 // With Session Keys

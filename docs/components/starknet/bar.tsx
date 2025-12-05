@@ -1,4 +1,5 @@
 import { useAccount, useConnect, useDisconnect } from "@starknet-start/react";
+import { StarknetWalletApi } from "@starknet-start/react/get-starknet";
 import { Button } from "../ui/button";
 
 export function WalletBar() {
@@ -42,7 +43,7 @@ function ConnectWallet() {
       <div className="flex flex-row justify-start space-x-2">
         {connectors.map((connector) => (
           <Button
-            key={connector.id}
+            key={connector.features[StarknetWalletApi].id}
             onClick={async () => {
               await connectAsync({ connector });
             }}

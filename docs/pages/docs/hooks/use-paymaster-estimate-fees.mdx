@@ -5,25 +5,21 @@ Hook to estimate fees for smart contract calls.
 ## Usage
 
 ```ts twoslash
-import { usePaymasterEstimateFees } from "@starknet-react/core";
+import { usePaymasterEstimateFees } from "@starknet-start/react";
 import { Call, FeeMode } from "starknet";
 
 const calls: Call[] = [
   {
     contractAddress: "STRK_SEPOLIA_ADDRESS",
     entrypoint: "transfer",
-    calldata: [
-      "recipient_address",
-      "0x1",
-      "0x0"
-    ],
+    calldata: ["recipient_address", "0x1", "0x0"],
   },
-]; 
+];
 
 const feeMode: FeeMode = {
-  mode: "default",// default or sponsored(need api-key)
-  gasToken: "USDC_SEPOLIA_ADDRESS",// mandatory if 'default'
-}
+  mode: "default", // default or sponsored(need api-key)
+  gasToken: "USDC_SEPOLIA_ADDRESS", // mandatory if 'default'
+};
 
 const { data, error } = usePaymasterEstimateFees({
   calls,

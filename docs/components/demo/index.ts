@@ -5,19 +5,19 @@ import { ChangeDefaultNetwork } from "./change-default-network";
 import { DeclareContract } from "./declare-contract";
 import { DeployContract } from "./deploy-contract";
 import { EstimateFees } from "./estimate-fees";
+import { Events } from "./events";
 import { NonceForAddress } from "./nonce-for-address";
+import { PaymasterGasTokens } from "./paymaster-gas-tokens";
 import { ReadContract } from "./read-contract";
+import { SendGaslessTransaction } from "./send-gasless-transaction";
 import { SendTransaction } from "./send-transaction";
 import { SignTypedData } from "./sign-typed-data";
 import { StarkAddress } from "./stark-address";
 import { StarkName } from "./stark-name";
 import { StarkProfile } from "./stark-profile";
-import { StarknetKit } from "./starknetkit";
+// import { StarknetKit } from "./starknetkit";
 import { SwitchChain } from "./switch-chain";
 import { WalletPermission } from "./wallet-permission";
-import { Events } from "./events";
-import { SendGaslessTransaction } from "./send-gasless-transaction";
-import { PaymasterGasTokens } from "./paymaster-gas-tokens";
 
 export default {
   Account,
@@ -36,7 +36,7 @@ export default {
   SignTypedData,
   DeclareContract,
   NonceForAddress,
-  StarknetKit,
+  // StarknetKit,
   ChangeDefaultNetwork,
   DeployContract,
   Events,

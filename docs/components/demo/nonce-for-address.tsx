@@ -1,8 +1,4 @@
-import {
-  type Address,
-  useAccount,
-  useNonceForAddress,
-} from "@starknet-start/react";
+import { useAccount, useNonceForAddress } from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
 import { DemoContainer } from "../starknet";
 
@@ -15,10 +11,12 @@ export function NonceForAddress() {
 }
 
 function NonceForAddressInner() {
-  const { account } = useAccount();
+  const { address } = useAccount();
 
   const { data, isLoading, isError, error, isPending } = useNonceForAddress({
-    address: account?.address as Address,
+    // biome-ignore lint/style/noNonNullAssertion: query will be enabled only when address is defined
+    address: address!,
+    enabled: !!address,
   });
 
   return (
