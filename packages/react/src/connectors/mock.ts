@@ -38,6 +38,7 @@ export type MockWalletOptions = {
   available?: boolean;
   failConnect?: boolean;
   rejectRequest?: boolean;
+  rejectDeclare?: boolean;
 };
 
 export type MockWalletAccounts = {
@@ -145,6 +146,8 @@ export class MockWallet implements WalletWithStarknetFeatures {
     this._emit("change", { accounts: this.accounts });
   }
 
+  readonly instanceId = Math.random().toString(36).slice(2);
+
   updateOptions(options: Partial<MockWalletOptions>): void {
     this._options = { ...this._options, ...options };
   }
@@ -247,6 +250,9 @@ export class MockWallet implements WalletWithStarknetFeatures {
       }
 
       case "wallet_addDeclareTransaction": {
+        if (this._options.rejectDeclare) {
+          throw new UserRejectedRequestError();
+        }
         if (!params) throw new Error("Params are missing");
         const { compiled_class_hash, contract_class, class_hash } =
           params as AddDeclareTransactionParameters;
