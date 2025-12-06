@@ -2,6 +2,7 @@ import type { Abi } from "abi-wan-kanabi";
 import { describe, expect, it } from "vitest";
 import { defaultConnector } from "../../test/devnet";
 import { act, renderHook, waitFor } from "../../test/react";
+import { UserRejectedRequestError } from "../errors";
 import { useAccount } from "./use-account";
 import { useConnect } from "./use-connect";
 import { useContract } from "./use-contract";
@@ -31,7 +32,7 @@ function useSendTransactionWithConnect() {
   };
 }
 
-describe.skip("useSendTransaction", () => {
+describe("useSendTransaction", () => {
   it("sends a transaction sucessfully", async () => {
     const { result } = renderHook(() => useSendTransactionWithConnect());
 
@@ -51,22 +52,32 @@ describe.skip("useSendTransaction", () => {
   });
 
   it("throws error if user rejects transaction", async () => {
-    const { result } = renderHook(() => useSendTransactionWithConnect(), {
-      connectorOptions: { rejectRequest: true },
-    });
+    const { result } = renderHook(() => useSendTransactionWithConnect());
+
     await act(async () => {
       await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
-    await act(async () => {
-      await result.current.sendTransaction.sendAsync();
-    });
+    defaultConnector.updateOptions({ rejectRequest: true });
 
-    await waitFor(() => {
-      expect(result.current.sendTransaction.isError).toBeTruthy();
-    });
+    try {
+      await act(async () => {
+        try {
+          await result.current.sendTransaction.sendAsync();
+        } catch {}
+      });
+
+      await waitFor(() => {
+        expect(result.current.sendTransaction.isError).toBeTruthy();
+        expect(result.current.sendTransaction.error).toBeInstanceOf(
+          UserRejectedRequestError,
+        );
+      });
+    } finally {
+      defaultConnector.updateOptions({ rejectRequest: false });
+    }
   });
 });
 

@@ -33,7 +33,7 @@
     "build": "tsdown",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
-    "test": "vitest",
+    "test": "vitest --fileParallelism=false",
     "test:ci": "vitest run",
     "lint": "biome check src",
     "lint:fix": "pnpm lint --write",

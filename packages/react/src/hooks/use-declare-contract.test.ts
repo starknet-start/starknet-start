@@ -29,7 +29,9 @@ function useDeclareContractWithConnect() {
 
 describe("useDeclareContract", () => {
   it("user approved the declaration in the wallet", async () => {
-    const { result } = renderHook(() => useDeclareContractWithConnect());
+    const { result } = renderHook(() => useDeclareContractWithConnect(), {
+      connectorOptions: { rejectDeclare: false },
+    });
 
     await act(async () => {
       await result.current.connect.connectAsync({
