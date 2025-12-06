@@ -54,7 +54,7 @@ We use vitest for writing tests.
 For running tests you need to setup a local testnet with docker by running the below command.
 
 ```
-docker run --rm -p 5050:5050 shardlabs/starknet-devnet-rs:0.0.6-seed0
+docker run --rm -p 5050:5050 shardlabs/starknet-devnet-rs:0.7.0-seed0
 ```
 
 Then start tests
