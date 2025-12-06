@@ -10,10 +10,10 @@ By default this hook fetches the latest block, but you can change it with the `b
 import { useNonceForAddress, useAccount } from "@starknet-start/react";
 import { type Address } from "@starknet-start/chains";
 
-const { account } = useAccount();
+const { address } = useAccount();
 
-const { data, isLoading, isError, error } = useNonceForAddress({
-  address: account?.address as Address,
+const { data, isLoading, isError, error, isPending } = useNonceForAddress({
+  address: address!,
 });
 ```
 
