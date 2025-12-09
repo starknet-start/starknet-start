@@ -15,7 +15,6 @@ import { SignTypedData } from "./sign-typed-data";
 import { StarkAddress } from "./stark-address";
 import { StarkName } from "./stark-name";
 import { StarkProfile } from "./stark-profile";
-// import { StarknetKit } from "./starknetkit";
 import { SwitchChain } from "./switch-chain";
 import { WalletPermission } from "./wallet-permission";
 
@@ -36,7 +35,6 @@ export default {
   SignTypedData,
   DeclareContract,
   NonceForAddress,
-  // StarknetKit,
   ChangeDefaultNetwork,
   DeployContract,
   Events,

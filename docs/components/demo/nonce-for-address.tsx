@@ -14,9 +14,7 @@ function NonceForAddressInner() {
   const { address } = useAccount();
 
   const { data, isLoading, isError, error, isPending } = useNonceForAddress({
-    // biome-ignore lint/style/noNonNullAssertion: query will be enabled only when address is defined
-    address: address!,
-    enabled: !!address,
+    address,
   });
 
   return (

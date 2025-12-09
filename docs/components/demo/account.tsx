@@ -1,8 +1,12 @@
+import {
+  StarknetInjectedWallet,
+  StarknetWalletApi,
+} from "@starknet-io/get-starknet-core";
 import { useAccount } from "@starknet-start/react";
-import { StarknetWalletApi } from "@starknet-start/react/get-starknet";
 import stringify from "safe-stable-stringify";
 import { DemoContainer } from "../starknet";
 
+StarknetInjectedWallet;
 export function Account() {
   return (
     <DemoContainer hasWallet>

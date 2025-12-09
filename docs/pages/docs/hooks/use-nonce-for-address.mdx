@@ -13,7 +13,7 @@ import { type Address } from "@starknet-start/chains";
 const { address } = useAccount();
 
 const { data, isLoading, isError, error, isPending } = useNonceForAddress({
-  address: address!,
+  address,
 });
 ```
 

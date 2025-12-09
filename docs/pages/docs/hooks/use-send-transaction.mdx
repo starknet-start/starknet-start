@@ -39,16 +39,14 @@ const abi = [
 
 const { address } = useAccount();
 const { chain } = useNetwork();
-const { contract } = useContract({
-  // [!code focus]
+
+const { contract } = useContract({ // [!code focus]
   abi, // [!code focus]
   address: chain.nativeCurrency.address, // [!code focus]
 }); // [!code focus]
 
-const { send, error } = useSendTransaction({
-  // [!code focus]
-  // [!code focus]
-  calls:
+const { send, error } = useSendTransaction({ // [!code focus]
+  calls: // [!code focus]
     contract && address // [!code focus]
       ? [contract.populate("transfer", [address, 1n])] // [!code focus]
       : undefined, // [!code focus]

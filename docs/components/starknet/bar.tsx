@@ -1,5 +1,5 @@
+import { StarknetWalletApi } from "@starknet-io/get-starknet-core";
 import { useAccount, useConnect, useDisconnect } from "@starknet-start/react";
-import { StarknetWalletApi } from "@starknet-start/react/get-starknet";
 import { Button } from "../ui/button";
 
 export function WalletBar() {
