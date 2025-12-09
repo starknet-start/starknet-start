@@ -16,7 +16,7 @@ export type UsePaymasterSendTransactionArgs = {
   /** List of smart contract calls to execute. */
   calls?: Call[];
   /** Paymaster details. */
-  options: PaymasterDetails;
+  options?: PaymasterDetails;
   /** Max fee in gas token. */
   maxFeeInGasToken?: BigNumberish;
 };

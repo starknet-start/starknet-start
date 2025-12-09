@@ -22,11 +22,6 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
-    },
-    "./get-starknet": {
-      "types": "./dist/get-starknet/index.d.mts",
-      "import": "./dist/get-starknet/index.mjs",
-      "default": "./dist/get-starknet/index.mjs"
     }
   },
   "scripts": {

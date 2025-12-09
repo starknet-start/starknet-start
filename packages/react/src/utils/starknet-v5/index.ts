@@ -1,4 +1,1 @@
-export * from "./account";
-export * from "./connect";
-export * from "./json";
-export * from "./types";
+export { WalletAccountV5 } from "./account";

@@ -15,7 +15,7 @@ export type UseNonceForAddressProps = UseQueryProps<
   ReturnType<typeof nonceForAddressQueryKey>
 > & {
   /** Address to fetch nonce for. */
-  address: Address;
+  address?: Address;
   /** Identifier for the block to fetch. */
   blockIdentifier?: BlockNumber;
 };
@@ -40,6 +40,7 @@ export function useNonceForAddress({
       provider,
       blockIdentifier,
     }),
+    enabled: props.enabled ?? !!address,
     ...props,
   });
 }

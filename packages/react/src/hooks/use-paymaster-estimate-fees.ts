@@ -48,7 +48,10 @@ export function usePaymasterEstimateFees({
     [calls, options],
   );
 
-  const enabled = useMemo(() => Boolean(enabled_ && calls), [enabled_, calls]);
+  const enabled = useMemo(
+    () => Boolean(enabled_ && calls && options),
+    [enabled_, calls, options],
+  );
 
   useInvalidateOnBlock({
     enabled: Boolean(enabled && watch),
