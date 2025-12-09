@@ -25,13 +25,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { WalletAccountV5 } from "src/utils/starknet-v5";
 import type {
   AccountInterface,
   PaymasterRpc,
   ProviderInterface,
 } from "starknet";
-import { constants } from "starknet";
+import { constants, WalletAccountV5 } from "starknet";
 import { AccountProvider } from "./account";
 
 type Simplify<T> = { [K in keyof T]: T[K] } & {};
