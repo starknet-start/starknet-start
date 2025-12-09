@@ -32,7 +32,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "safe-stable-stringify": "^2.5.0",
-    "starknet": "^8.9.1",
+    "starknet": "^9.1.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
     "tw-animate-css": "^1.4.0",

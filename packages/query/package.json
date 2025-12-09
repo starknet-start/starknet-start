@@ -36,7 +36,7 @@
     "format": "biome format . --write"
   },
   "peerDependencies": {
-    "starknet": "^8.9.1"
+    "starknet": "^9.1.1"
   },
   "dependencies": {
     "@starknet-io/get-starknet-core": "^5.0.0",

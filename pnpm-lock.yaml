@@ -25,7 +25,7 @@ importers:
     dependencies:
       '@cartridge/connector':
         specifier: ^0.11.2
-        version: 0.11.2(@starknet-react/core@4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@8.9.1)(typescript@5.9.3)(utf-8-validate@5.0.10))(@types/react@19.2.7)(bufferutil@4.0.9)(react@19.2.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+        version: 0.11.2(@starknet-react/core@4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@9.1.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(utf-8-validate@5.0.10))(@types/react@19.2.7)(bufferutil@4.0.9)(react@19.2.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@cartridge/controller':
         specifier: ^0.11.2
         version: 0.11.2(@types/react@19.2.7)(bufferutil@4.0.9)(react@19.2.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
@@ -81,8 +81,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0
       starknet:
-        specifier: ^8.9.1
-        version: 8.9.1
+        specifier: ^9.1.1
+        version: 9.1.1(typescript@5.9.3)(zod@3.25.76)
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
@@ -143,8 +143,8 @@ importers:
         specifier: workspace:*
         version: link:../chains
       starknet:
-        specifier: ^8.9.1
-        version: 8.9.1
+        specifier: ^9.1.1
+        version: 9.1.1(typescript@5.9.3)(zod@3.25.76)
     devDependencies:
       '@starknet-start/typescript-config':
         specifier: workspace:*
@@ -177,8 +177,8 @@ importers:
         specifier: ^2.2.4
         version: 2.2.4
       starknet:
-        specifier: ^8.9.1
-        version: 8.9.1
+        specifier: ^9.1.1
+        version: 9.1.1(typescript@5.9.3)(zod@3.25.76)
       viem:
         specifier: ^2.21.1
         version: 2.38.0(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
@@ -272,8 +272,8 @@ importers:
         specifier: ^4.1.2
         version: 4.4.1
       starknet:
-        specifier: ^8.9.1
-        version: 8.9.1
+        specifier: ^9.1.1
+        version: 9.1.1(typescript@5.9.3)(zod@3.25.76)
       tsdown:
         specifier: ^0.16.8
         version: 0.16.8(typescript@5.9.3)
@@ -2385,6 +2385,9 @@ packages:
 
   '@starknet-io/get-starknet-wallets@5.0.0':
     resolution: {integrity: sha512-fuywFgoal4Al2KdFQCNTYgioK0ubu3cP+mM6OxE8ti78Nmd9ySlh78LwdKNXIp2Alq4kaQ5XMf6HMgkStCWhkw==}
+
+  '@starknet-io/types-js@0.10.0':
+    resolution: {integrity: sha512-7ALSydz6pq3YIOpq5a7OkkxqwJciMc9Nlph0OGjhcC3xX0xH30XgizmziLyYVN10oO9+BJk8M9KbJjpzdbtRSw==}
 
   '@starknet-io/types-js@0.7.10':
     resolution: {integrity: sha512-1VtCqX4AHWJlRRSYGSn+4X1mqolI1Tdq62IwzoU2vUuEE72S1OlEeGhpvd6XsdqXcfHmVzYfj8k1XtKBQqwo9w==}
@@ -5375,6 +5378,10 @@ packages:
     resolution: {integrity: sha512-8ybImGx182WyVg2FeM4VwGZYCucFEVD8nsQd1U7oLckWqNE8ivE6Cbn2XDfmg7bxgLvpi/oluFAAPI/RRgOg6Q==}
     engines: {node: '>=22'}
 
+  starknet@9.1.1:
+    resolution: {integrity: sha512-3Fd4Ygp9zZd0EJBYF1yCWMeiickNN9arANVAvEzarGFy+ysG+CgHK/g9PeI75uo0pq0FHJ8fjUG7zzMyMZxHXQ==}
+    engines: {node: '>=22'}
+
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
     engines: {node: '>= 0.8'}
@@ -6377,11 +6384,11 @@ snapshots:
 
   '@braintree/sanitize-url@7.1.1': {}
 
-  '@cartridge/connector@0.11.2(@starknet-react/core@4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@8.9.1)(typescript@5.9.3)(utf-8-validate@5.0.10))(@types/react@19.2.7)(bufferutil@4.0.9)(react@19.2.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@cartridge/connector@0.11.2(@starknet-react/core@4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@9.1.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(utf-8-validate@5.0.10))(@types/react@19.2.7)(bufferutil@4.0.9)(react@19.2.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
     dependencies:
       '@cartridge/controller': 0.11.2(@types/react@19.2.7)(bufferutil@4.0.9)(react@19.2.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@starknet-io/get-starknet-wallet-standard': 5.0.0-beta.0(typescript@5.9.3)(zod@3.25.76)
-      '@starknet-react/core': 4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@8.9.1)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@starknet-react/core': 4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@9.1.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -8390,6 +8397,8 @@ snapshots:
 
   '@starknet-io/get-starknet-wallets@5.0.0': {}
 
+  '@starknet-io/types-js@0.10.0': {}
+
   '@starknet-io/types-js@0.7.10': {}
 
   '@starknet-io/types-js@0.8.4': {}
@@ -8400,7 +8409,7 @@ snapshots:
 
   '@starknet-react/chains@4.0.4': {}
 
-  '@starknet-react/core@4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@8.9.1)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@starknet-react/core@4.0.1-beta.4(bufferutil@4.0.9)(get-starknet-core@4.0.0)(react@19.2.0)(starknet@9.1.1(typescript@5.9.3)(zod@3.25.76))(typescript@5.9.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@starknet-io/types-js': 0.7.10
       '@starknet-react/chains': 4.0.4
@@ -8409,7 +8418,7 @@ snapshots:
       eventemitter3: 5.0.1
       get-starknet-core: 4.0.0
       react: 19.2.0
-      starknet: 8.9.1
+      starknet: 9.1.1(typescript@5.9.3)(zod@3.25.76)
       viem: 2.41.2(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       zod: 3.25.76
     transitivePeerDependencies:
@@ -12613,6 +12622,23 @@ snapshots:
       lossless-json: 4.3.0
       pako: 2.1.0
       ts-mixer: 6.0.4
+
+  starknet@9.1.1(typescript@5.9.3)(zod@3.25.76):
+    dependencies:
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.1
+      '@scure/base': 1.2.6
+      '@scure/starknet': 1.1.0
+      '@starknet-io/get-starknet-wallet-standard': 5.0.0(typescript@5.9.3)(zod@3.25.76)
+      '@starknet-io/starknet-types-010': '@starknet-io/types-js@0.10.0'
+      '@starknet-io/starknet-types-09': '@starknet-io/types-js@0.9.2'
+      abi-wan-kanabi: 2.2.4
+      lossless-json: 4.3.0
+      pako: 2.1.0
+      ts-mixer: 6.0.4
+    transitivePeerDependencies:
+      - typescript
+      - zod
 
   statuses@2.0.1: {}
 
