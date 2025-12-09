@@ -1,0 +1,7 @@
+{
+  "type": "major",
+  "comment": "Extract shared query logic, keys, and types from React package.",
+  "packageName": "@starknet-start/query",
+  "email": "jadejajaipal5@gmail.com",
+  "dependentChangeType": "patch"
+}

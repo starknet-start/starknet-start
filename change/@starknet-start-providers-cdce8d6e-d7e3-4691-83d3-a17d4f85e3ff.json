@@ -1,0 +1,7 @@
+{
+  "type": "major",
+  "comment": "Update RPC spec to 0.10.0 and upgrade to starknet.js v9",
+  "packageName": "@starknet-start/providers",
+  "email": "jadejajaipal5@gmail.com",
+  "dependentChangeType": "patch"
+}
