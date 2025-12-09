@@ -8,7 +8,7 @@ export function publicProvider() {
       const rpcs = chain.rpcUrls.public.http;
       const nodeUrl = rpcs[Math.floor(Math.random() * rpcs.length)];
       if (!nodeUrl) return null;
-      return { nodeUrl, specVersion: "0.8.1" };
+      return { nodeUrl, specVersion: "0.9.0" };
     },
   });
 }

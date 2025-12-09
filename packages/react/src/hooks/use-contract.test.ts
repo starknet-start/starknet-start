@@ -230,11 +230,11 @@ describe("useContract", () => {
               "batchClient": undefined,
               "blockIdentifier": "latest",
               "chainId": "0x534e5f5345504f4c4941",
-              "channelSpecVersion": "0.9.0",
+              "channelSpecVersion": "0.10.0",
               "headers": {
                 "Content-Type": "application/json",
               },
-              "id": "RPC090",
+              "id": "RPC0.10.0",
               "nodeUrl": "http://localhost:5050/rpc",
               "requestId": 0,
               "retries": 200,
