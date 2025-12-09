@@ -7,7 +7,7 @@ import type {
 
 export type PaymasterEstimateFeesArgs = {
   calls?: Call[];
-  options: PaymasterDetails;
+  options?: PaymasterDetails;
 };
 
 export type PaymasterEstimateFeesQueryFnParams = {
@@ -35,6 +35,7 @@ export function paymasterEstimateFeesQueryFn({
   return async (): Promise<PaymasterFeeEstimate> => {
     if (!account) throw new Error("account is required");
     if (!calls || calls.length === 0) throw new Error("calls are required");
+    if (!options) throw new Error("paymaster options are required");
     return await account.estimatePaymasterTransactionFee(calls, options);
   };
 }

@@ -2,8 +2,8 @@ import type { Address } from "@starknet-start/chains";
 import type { BlockNumber, Nonce, ProviderInterface } from "starknet";
 
 export type NonceForAddressQueryKeyParams = {
-  address: Address;
-  blockIdentifier: BlockNumber;
+  address?: Address;
+  blockIdentifier?: BlockNumber;
 };
 
 export type NonceForAddressQueryFnParams = {
@@ -23,6 +23,9 @@ export function nonceForAddressQueryFn({
   address,
 }: NonceForAddressQueryFnParams) {
   return async (): Promise<Nonce> => {
+    if (!address) {
+      throw new Error("Address cannot be empty to get the nonce");
+    }
     const nonce = await provider.getNonceForAddress(address, blockIdentifier);
     return nonce;
   };

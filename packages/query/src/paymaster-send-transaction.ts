@@ -16,12 +16,14 @@ export function paymasterSendTransactionMutationFn({
   maxFeeInGasToken,
 }: {
   account?: AccountInterface;
-  options: PaymasterDetails;
+  options?: PaymasterDetails;
   maxFeeInGasToken?: BigNumberish;
 }) {
   return async (calls: Call[]): Promise<InvokeFunctionResponse> => {
     if (!account) throw new Error("account is required");
     if (!calls || calls.length === 0) throw new Error("calls are required");
+    if (!options) throw new Error("paymaster options are required");
+
     return account.executePaymasterTransaction(
       calls,
       options,
