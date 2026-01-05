@@ -1,7 +1,8 @@
-import type {
-  BlockNumber,
-  GetBlockResponse,
-  ProviderInterface,
+import {
+  type BlockNumber,
+  BlockStatus,
+  type GetBlockResponse,
+  type ProviderInterface,
 } from "starknet";
 
 export type BlockNumberQueryKeyParams = {
@@ -27,7 +28,7 @@ export function blockNumberQueryFn({
     const block = (await provider.getBlock(
       blockIdentifier,
     )) as GetBlockResponse;
-    if (block.status !== "PENDING") {
+    if (block.status !== BlockStatus.PRE_CONFIRMED) {
       return block.block_number;
     }
     return undefined;

@@ -1,8 +1,8 @@
-import type { Events } from "@starknet-io/types-js";
 import type { Address } from "@starknet-start/chains";
 import {
   type BlockIdentifier as BlockIdentifier_,
   BlockTag,
+  type EVENTS_CHUNK,
   hash,
   num,
   type RpcProvider,
@@ -63,7 +63,11 @@ export function eventsQueryFn({
   const toBlockId = toBlock ? blockIdentifierToBlockId(toBlock) : undefined;
   const chunkSize = pageSize ? pageSize : DEFAULT_PAGE_SIZE;
 
-  return async ({ pageParam }: { pageParam?: string }): Promise<Events> => {
+  return async ({
+    pageParam,
+  }: {
+    pageParam?: string;
+  }): Promise<EVENTS_CHUNK> => {
     const res = await provider.getEvents({
       from_block: fromBlockId,
       to_block: toBlockId,

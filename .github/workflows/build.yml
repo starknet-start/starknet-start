@@ -34,6 +34,8 @@ jobs:
         run: pnpm format:check
       - name: Run lint
         run: pnpm lint
+      - name: Run typecheck
+        run: pnpm typecheck
       - name: Run build
         run: pnpm build
       - name: Run test

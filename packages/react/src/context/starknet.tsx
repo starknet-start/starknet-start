@@ -176,7 +176,7 @@ function StarknetProviderInner({
 
   const handleChange: StandardEventsListeners["change"] = useCallback(
     (change) => {
-      if (change.accounts) {
+      if (change.accounts && change.accounts.length > 0) {
         const account = change.accounts[0];
         setAddress(account.address as Address);
 
