@@ -1,9 +1,14 @@
 import {
+  StandardEvents,
+  type StandardEventsListeners,
+} from "@starknet-io/get-starknet-core";
+import {
   GetStarknetProvider,
   type UseConnect,
   useConnect as useGetStarknetConnect,
   useStarknetProvider,
 } from "@starknet-io/get-starknet-modal";
+import { StarknetWalletApi } from "@starknet-io/get-starknet-wallet-standard/features";
 import {
   type Address,
   type Chain,
@@ -155,12 +160,13 @@ function StarknetProviderInner({
   const updateChainAndProvider = useCallback(
     (chainId: bigint) => {
       const targetChain = chains.find((c) => c.id === chainId);
-      if (!targetChain) return;
+      if (!targetChain) {
+        return;
+      }
 
       const { provider: newProvider } = providerForChain(targetChain, provider);
       const { paymasterProvider: newPaymasterProvider } =
         paymasterProviderForChain(targetChain, _paymasterProvider);
-
       setCurrentChain(targetChain);
       setCurrentProvider(newProvider);
       setCurrentPaymasterProvider(newPaymasterProvider);
@@ -168,35 +174,86 @@ function StarknetProviderInner({
     [chains, provider, _paymasterProvider],
   );
 
-  useEffect(() => {
-    if (connected) {
-      // Get address from wallet
-      const walletAddress = connected.accounts?.[0]?.address as Address;
-      setAddress(walletAddress);
+  const handleChange: StandardEventsListeners["change"] = useCallback(
+    (change) => {
+      if (change.accounts) {
+        const account = change.accounts[0];
+        setAddress(account.address as Address);
 
-      // Get chain from wallet if available
-      if (connected.chains?.[0]) {
         try {
-          const chainIdentifier = connected.chains[0];
+          const chainIdentifier = account.chains[0];
           const parts = chainIdentifier.split(":");
           const chainIdHex = parts[parts.length - 1];
           const chainId = BigInt(chainIdHex);
-          if (chainId !== currentChain.id) {
+
+          updateChainAndProvider(chainId);
+        } catch (error) {
+          console.error("Failed to parse chain ID:", error);
+        }
+      }
+    },
+    [updateChainAndProvider],
+  );
+
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    if (connected) {
+      const walletAddress = connected.accounts?.[0]?.address as Address;
+      setAddress(walletAddress);
+
+      if (connected.accounts?.[0]?.chains?.[0]) {
+        try {
+          const chainIdentifier = connected.accounts[0].chains[0];
+          const parts = chainIdentifier.split(":");
+          const chainIdHex = parts[parts.length - 1];
+          const chainId = BigInt(chainIdHex);
+
+          let targetChainId: bigint;
+
+          if (defaultChainId) {
+            targetChainId = defaultChainId;
+          } else if (chains.length > 0) {
+            targetChainId = chains[0].id;
+          } else {
+            targetChainId = chainId;
+          }
+
+          if (chainId !== targetChainId) {
+            const targetChain = chains.find((c) => c.id === targetChainId);
+            if (targetChain) {
+              updateChainAndProvider(targetChainId);
+
+              const targetStarknetChainId = starknetChainId(targetChainId);
+              if (targetStarknetChainId) {
+                connected.features[StarknetWalletApi]
+                  .request({
+                    type: "wallet_switchStarknetChain",
+                    params: { chainId: targetStarknetChainId },
+                  })
+                  .catch((error: Error) => {
+                    console.warn(
+                      "Failed to switch wallet to target chain:",
+                      error,
+                    );
+                    updateChainAndProvider(chainId);
+                  });
+              }
+            } else {
+              updateChainAndProvider(chainId);
+            }
+          } else {
             updateChainAndProvider(chainId);
           }
         } catch (error) {
           console.error("Failed to parse chain ID:", error);
         }
+      } else if (defaultChainId) {
+        updateChainAndProvider(defaultChainId);
+      } else if (chains.length > 0) {
+        updateChainAndProvider(chains[0].id);
       }
 
-      setAccount(
-        new WalletAccountV5({
-          address: walletAddress,
-          provider: currentProvider,
-          walletProvider: connected,
-          paymaster: currentPaymasterProvider,
-        }),
-      );
+      cleanup = connected.features[StandardEvents].on("change", handleChange);
     } else {
       setAddress(undefined);
       setAccount(undefined);
@@ -204,19 +261,36 @@ function StarknetProviderInner({
       setCurrentProvider(defaultProvider);
       setCurrentPaymasterProvider(defaultPaymasterProvider);
     }
+
+    return () => {
+      cleanup?.();
+    };
   }, [
     defaultChain,
+    defaultChainId,
     defaultPaymasterProvider,
     defaultProvider,
     connected,
+    chains,
     updateChainAndProvider,
-    currentProvider,
-    currentPaymasterProvider,
-    currentChain,
+    handleChange,
   ]);
 
-  const state: StarknetState = useMemo(
-    () => ({
+  useEffect(() => {
+    if (connected && address) {
+      setAccount(
+        new WalletAccountV5({
+          address,
+          provider: currentProvider,
+          walletProvider: connected,
+          paymaster: currentPaymasterProvider,
+        }),
+      );
+    }
+  }, [connected, address, currentProvider, currentPaymasterProvider]);
+
+  const state: StarknetState = useMemo(() => {
+    return {
       connect,
       disconnect,
       isConnecting,
@@ -234,26 +308,25 @@ function StarknetProviderInner({
       recommendedWallets,
       wallets,
       selected,
-    }),
-    [
-      connect,
-      disconnect,
-      isConnecting,
-      isError,
-      connected,
-      chains,
-      currentChain,
-      explorer,
-      currentProvider,
-      currentPaymasterProvider,
-      extraWallets,
-      injectedWallets,
-      onSelectedChange,
-      recommendedWallets,
-      wallets,
-      selected,
-    ],
-  );
+    };
+  }, [
+    connect,
+    disconnect,
+    isConnecting,
+    isError,
+    connected,
+    chains,
+    currentChain,
+    explorer,
+    currentProvider,
+    currentPaymasterProvider,
+    extraWallets,
+    injectedWallets,
+    onSelectedChange,
+    recommendedWallets,
+    wallets,
+    selected,
+  ]);
 
   return (
     <QueryClientProvider client={queryClient ?? defaultQueryClient}>
