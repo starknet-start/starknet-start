@@ -26,6 +26,7 @@
   },
   "scripts": {
     "build": "tsdown",
+    "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "lint": "biome check src",
     "lint:fix": "pnpm lint --write",
