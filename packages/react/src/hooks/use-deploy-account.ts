@@ -1,31 +1,17 @@
-import type {
-  AccountInterface,
-  BigNumberish,
-  DeployContractResponse,
-  InvocationsDetails,
-  RawArgs,
-} from "starknet";
-
+import {
+  type DeployAccountVariables,
+  deployAccountMutationFn,
+  deployAccountMutationKey,
+} from "@starknet-start/query";
+import { useStarknetAccount } from "src/context/account";
+import type { DeployContractResponse } from "starknet";
 import {
   type UseMutationProps,
   type UseMutationResult,
   useMutation,
 } from "../query";
 
-import { useAccount } from "./use-account";
-
-export type DeployAccountVariables = {
-  /** The class hash of the contract to deploy. */
-  classHash?: string;
-  /** The constructor arguments. */
-  constructorCalldata?: RawArgs;
-  /** Address salt. */
-  addressSalt?: BigNumberish;
-  /** Contract address. */
-  contractAddress?: string;
-  /** Transaction options. */
-  options?: InvocationsDetails;
-};
+export type { DeployAccountVariables };
 
 export type UseDeployAccountProps = DeployAccountVariables &
   UseMutationProps<DeployContractResponse, Error, DeployAccountVariables>;
@@ -62,9 +48,9 @@ export function useDeployAccount({
   options,
   ...props
 }: UseDeployAccountProps): UseDeployAccountResult {
-  const { account } = useAccount();
+  const { account } = useStarknetAccount();
   const { mutate, mutateAsync, ...result } = useMutation({
-    mutationKey: mutationKey({
+    mutationKey: deployAccountMutationKey({
       account,
       classHash,
       constructorCalldata,
@@ -72,7 +58,7 @@ export function useDeployAccount({
       contractAddress,
       options,
     }),
-    mutationFn: mutationFn({
+    mutationFn: deployAccountMutationFn({
       account,
       classHash,
       constructorCalldata,
@@ -87,29 +73,5 @@ export function useDeployAccount({
     deployAccount: mutate,
     deployAccountAsync: mutateAsync,
     ...result,
-  };
-}
-
-function mutationKey(
-  props: { account?: AccountInterface } & Partial<DeployAccountVariables>,
-) {
-  return [{ entity: "deployAccount", ...props }] as const;
-}
-
-function mutationFn({
-  account,
-  classHash,
-  constructorCalldata,
-  addressSalt,
-  contractAddress,
-  options,
-}: { account?: AccountInterface } & Partial<DeployAccountVariables>) {
-  return async () => {
-    if (!account) throw new Error("account is required");
-    if (!classHash) throw new Error("classHash is required");
-    return await account.deployAccount(
-      { classHash, constructorCalldata, addressSalt, contractAddress },
-      options,
-    );
   };
 }

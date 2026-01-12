@@ -1,22 +1,13 @@
+import {
+  type EstimateFeesArgs,
+  estimateFeesQueryFn,
+  estimateFeesQueryKey,
+} from "@starknet-start/query";
 import { useMemo } from "react";
-import type {
-  AccountInterface,
-  Call,
-  EstimateFeeResponseOverhead,
-  UniversalDetails,
-} from "starknet";
-
+import { useStarknetAccount } from "src/context/account";
+import type { EstimateFeeResponseOverhead } from "starknet";
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
-
-import { useAccount } from "./use-account";
 import { useInvalidateOnBlock } from "./use-invalidate-on-block";
-
-export type EstimateFeesArgs = {
-  /** List of smart contract calls to estimate. */
-  calls?: Call[];
-  /** Estimate Fee options. */
-  options?: UniversalDetails;
-};
 
 /** Options for `useEstimateFees`. */
 export type UseEstimateFeesProps = EstimateFeesArgs &
@@ -24,7 +15,7 @@ export type UseEstimateFeesProps = EstimateFeesArgs &
     EstimateFeeResponseOverhead,
     Error,
     EstimateFeeResponseOverhead,
-    ReturnType<typeof queryKey>
+    ReturnType<typeof estimateFeesQueryKey>
   > & {
     /** Refresh data at every block. */
     watch?: boolean;
@@ -50,10 +41,10 @@ export function useEstimateFees({
   enabled: enabled_ = true,
   ...props
 }: UseEstimateFeesProps): UseEstimateFeesResult {
-  const { account } = useAccount();
+  const { account } = useStarknetAccount();
 
   const queryKey_ = useMemo(
-    () => queryKey({ calls, options }),
+    () => estimateFeesQueryKey({ calls, options }),
     [calls, options],
   );
 
@@ -66,7 +57,7 @@ export function useEstimateFees({
 
   return useQuery({
     queryKey: queryKey_,
-    queryFn: queryFn({
+    queryFn: estimateFeesQueryFn({
       account,
       calls,
       options,
@@ -74,26 +65,4 @@ export function useEstimateFees({
     enabled,
     ...props,
   });
-}
-
-function queryKey({ calls, options }: EstimateFeesArgs) {
-  return [
-    {
-      entity: "estimateInvokeFee",
-      calls,
-      options,
-    },
-  ] as const;
-}
-
-function queryFn({
-  account,
-  calls,
-  options,
-}: { account?: AccountInterface } & EstimateFeesArgs) {
-  return async () => {
-    if (!account) throw new Error("account is required");
-    if (!calls || calls.length === 0) throw new Error("calls are required");
-    return await account.estimateInvokeFee(calls, options);
-  };
 }

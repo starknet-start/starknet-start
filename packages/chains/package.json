@@ -15,17 +15,18 @@
     "src",
     "README.md"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     }
   },
   "scripts": {
     "build": "tsdown",
+    "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "lint": "biome check src",
     "lint:fix": "pnpm lint --write",
@@ -35,7 +36,7 @@
   "devDependencies": {
     "@starknet-start/typescript-config": "workspace:*",
     "rimraf": "^4.1.2",
-    "tsdown": "^0.15.6"
+    "tsdown": "^0.16.8"
   },
   "dependencies": {}
 }

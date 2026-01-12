@@ -9,23 +9,17 @@ By default this hook tries to fetches all the events (5 events per page) startin
 Fetch ETH Transfer events:
 
 ```ts twoslash
-import { useEvents } from "@starknet-react/core";
+import { useEvents } from "@starknet-start/react";
 
-const {
-  data,
-  error,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-} = useEvents(
-  {
-    address: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  useEvents({
+    address:
+      "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
     eventName: "Transfer",
     fromBlock: 442920,
     toBlock: "latest",
-    pageSize: 10
-  }
-);
+    pageSize: 10,
+  });
 ```
 
 ## Arguments
@@ -69,6 +63,7 @@ The number of events returned from each individual query, default to 5.
 ### data
 
 - Type: `InfiniteData<Events, string>`
+
 ```
 InfiniteData<Events, string> = {
     pages: Array<Events>; // Array containing all pages.

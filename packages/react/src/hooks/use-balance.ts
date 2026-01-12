@@ -1,17 +1,10 @@
-import type { Address, Chain } from "@starknet-start/chains";
+import type { Address } from "@starknet-start/chains";
+import { balanceQueryFn, balanceQueryKey } from "@starknet-start/query";
 import { useMemo } from "react";
-import {
-  type BlockNumber,
-  BlockTag,
-  type CallOptions,
-  num,
-  shortString,
-} from "starknet";
-import { formatUnits } from "viem";
-
+import { type BlockNumber, BlockTag } from "starknet";
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
 
-import { type StarknetTypedContract, useContract } from "./use-contract";
+import { useContract } from "./use-contract";
 import { useInvalidateOnBlock } from "./use-invalidate-on-block";
 import { useNetwork } from "./use-network";
 
@@ -28,7 +21,7 @@ export type UseBalanceProps = UseQueryProps<
   Balance,
   Error,
   Balance,
-  ReturnType<typeof queryKey>
+  ReturnType<typeof balanceQueryKey>
 > & {
   /** The contract's address. Defaults to the native currency. */
   token?: Address;
@@ -41,9 +34,6 @@ export type UseBalanceProps = UseQueryProps<
 };
 
 export type UseBalanceResult = UseQueryResult<Balance, Error>;
-
-type TAbi = typeof balanceABIFragment;
-type Contract = StarknetTypedContract<TAbi>;
 
 /**
  * Fetch the balance for the provided address and token.
@@ -68,7 +58,7 @@ export function useBalance({
   });
 
   const queryKey_ = useMemo(
-    () => queryKey({ chain, token, address, blockIdentifier }),
+    () => balanceQueryKey({ chain, token, address, blockIdentifier }),
     [chain, token, address, blockIdentifier],
   );
 
@@ -92,81 +82,15 @@ export function useBalance({
     enabled,
     refetchInterval,
     queryKey: queryKey_,
-    queryFn: queryFn({ chain, contract, token, address, blockIdentifier }),
-    ...props,
-  });
-}
-
-function queryKey({
-  chain,
-  token,
-  address,
-  blockIdentifier,
-}: {
-  chain: Chain;
-  token?: string;
-  address?: string;
-  blockIdentifier?: BlockNumber;
-}) {
-  return [
-    {
-      entity: "balance",
-      chainId: chain?.name,
+    queryFn: balanceQueryFn({
+      chain,
+      contract,
       token,
       address,
       blockIdentifier,
-    },
-  ] as const;
-}
-
-function queryFn({
-  chain,
-  token,
-  address,
-  contract,
-  blockIdentifier,
-}: {
-  chain: Chain;
-  token?: string;
-  address?: string;
-  contract?: Contract;
-  blockIdentifier?: BlockNumber;
-}) {
-  return async () => {
-    if (!address) throw new Error("address is required");
-    if (!contract) throw new Error("contract is required");
-
-    const options: CallOptions = {
-      blockIdentifier,
-    };
-
-    const isNativeCurrency = token === chain.nativeCurrency.address;
-
-    let symbol = chain.nativeCurrency.symbol;
-    if (!isNativeCurrency) {
-      const symbol_ = await contract.withOptions(options).symbol();
-      symbol = shortString.decodeShortString(num.toHex(symbol_));
-    }
-
-    let decimals = chain.nativeCurrency.decimals;
-    if (!isNativeCurrency) {
-      const decimals_ = await contract.withOptions(options).decimals();
-      decimals = Number(decimals_);
-    }
-
-    const balanceOf = (await contract
-      .withOptions(options)
-      .balanceOf(address)) as bigint;
-
-    const formatted = formatUnits(balanceOf, decimals);
-
-    return {
-      value: balanceOf,
-      decimals: decimals,
-      symbol: symbol,
-      formatted: formatted,
-    };
-  };
+    }),
+    ...props,
+  });
 }
 
 const balanceABIFragment = [

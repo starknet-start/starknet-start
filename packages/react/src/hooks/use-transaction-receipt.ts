@@ -1,13 +1,11 @@
-import type { Chain } from "@starknet-start/chains";
+import {
+  transactionReceiptQueryFn,
+  transactionReceiptQueryKey,
+} from "@starknet-start/query";
 import { useMemo } from "react";
-import type {
-  GetTransactionReceiptResponse,
-  ProviderInterface,
-} from "starknet";
-
+import type { GetTransactionReceiptResponse } from "starknet";
 import { useStarknet } from "../context/starknet";
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
-
 import { useInvalidateOnBlock } from "./use-invalidate-on-block";
 
 /** Arguments for the `useTransactionReceipt` hook. */
@@ -15,7 +13,7 @@ export type UseTransactionReceiptProps = UseQueryProps<
   GetTransactionReceiptResponse,
   Error,
   GetTransactionReceiptResponse,
-  ReturnType<typeof queryKey>
+  ReturnType<typeof transactionReceiptQueryKey>
 > & {
   /** The transaction hash. */
   hash?: string;
@@ -50,7 +48,10 @@ export function useTransactionReceipt({
 }: UseTransactionReceiptProps): UseTransactionReceiptResult {
   const { provider, chain } = useStarknet();
 
-  const queryKey_ = useMemo(() => queryKey({ chain, hash }), [chain, hash]);
+  const queryKey_ = useMemo(
+    () => transactionReceiptQueryKey({ chain, hash }),
+    [chain, hash],
+  );
 
   const enabled = useMemo(() => Boolean(enabled_ && hash), [enabled_, hash]);
 
@@ -61,28 +62,8 @@ export function useTransactionReceipt({
 
   return useQuery({
     queryKey: queryKey_,
-    queryFn: queryFn({ provider, hash }),
+    queryFn: transactionReceiptQueryFn({ provider, hash }),
     enabled,
     ...props,
   });
-}
-
-function queryKey({ chain, hash }: { chain?: Chain; hash?: string }) {
-  return [
-    { entity: "transactionReceipt", chainId: chain?.name, hash },
-  ] as const;
-}
-
-function queryFn({
-  provider,
-  hash,
-}: {
-  provider: ProviderInterface;
-  hash?: string;
-}) {
-  return async () => {
-    if (!hash) throw new Error("hash is required");
-
-    return await provider.getTransactionReceipt(hash);
-  };
 }

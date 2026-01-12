@@ -9,7 +9,7 @@ import { useDisconnect } from "./use-disconnect";
 import { useNetwork } from "./use-network";
 import { usePaymasterEstimateFees } from "./use-paymaster-estimate-fees";
 
-const STARKNET_SEPOLIA_NATIVE_TOKEN_ADDRESS =
+const _STARKNET_SEPOLIA_NATIVE_TOKEN_ADDRESS =
   "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d";
 
 function usePaymasterEstimateFeesWithConnect() {
@@ -22,10 +22,9 @@ function usePaymasterEstimateFeesWithConnect() {
 
   const { address } = useAccount();
 
-  const calls =
-    contract && address
-      ? [contract.populate("transfer", [address, 1n])]
-      : undefined;
+  const calls = contract
+    ? [contract.populate("transfer", [address ?? "0x01", 1n])]
+    : undefined;
 
   return {
     estimatePaymasterFees: usePaymasterEstimateFees({
@@ -33,7 +32,7 @@ function usePaymasterEstimateFeesWithConnect() {
       options: {
         feeMode: {
           mode: "default",
-          gasToken: STARKNET_SEPOLIA_NATIVE_TOKEN_ADDRESS,
+          gasToken: chain.nativeCurrency.address,
         },
       },
     }),
@@ -42,19 +41,19 @@ function usePaymasterEstimateFeesWithConnect() {
   };
 }
 
-describe.skip("usePaymasterEstimateFees", () => {
-  it("estimate sucessfull if account is connected", async () => {
+describe("usePaymasterEstimateFees", () => {
+  it.skip("estimate sucessfull if account is connected", async () => {
     const { result } = renderHook(() => usePaymasterEstimateFeesWithConnect());
 
     await act(async () => {
-      result.current.connect.connect({
+      await result.current.connect.connectAsync({
         connector: defaultConnector,
       });
     });
 
     // Wait for the account to be initialized
     await waitFor(() => {
-      expect(result.current.connect.isSuccess).toBeTruthy();
+      expect(result.current.connect.connector).toBeTruthy();
     });
 
     await waitFor(() => {

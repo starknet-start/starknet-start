@@ -12,7 +12,8 @@
     "lint:fix": "turbo run lint:fix --parallel",
     "format": "turbo run format --parallel",
     "format:check": "turbo run format:check --parallel",
-    "clean": "turbo run clean --parallel"
+    "clean": "turbo run clean --parallel",
+    "typecheck": "turbo run typecheck --parallel"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",
@@ -31,7 +32,8 @@
   "packageManager": "pnpm@10.18.0",
   "beachball": {
     "ignorePatterns": [
-      "docs/**"
+      "docs/**",
+      "packages/vue/**"
     ]
   }
 }

@@ -1,6 +1,6 @@
 import { devnet } from "@starknet-start/chains";
 import { Account, type AccountInterface, RpcProvider } from "starknet";
-import { MockConnector } from "../src/connectors";
+import { MockWallet, type MockWalletAccounts } from "../src/connectors/mock";
 
 const provider = new RpcProvider({ nodeUrl: devnet.rpcUrls.public.http[0] });
 
@@ -44,15 +44,13 @@ function makeAccount({
   return new Account({ provider, address, signer: privateKey });
 }
 
-export const accounts = {
+export const accounts: MockWalletAccounts = {
   sepolia: [makeAccount(devnetAccounts[1]), makeAccount(devnetAccounts[3])],
   mainnet: [makeAccount(devnetAccounts[0]), makeAccount(devnetAccounts[2])],
 };
 
-export const defaultConnector = new MockConnector({
-  accounts,
-  options: {
-    id: "mock",
-    name: "Mock Connector",
-  },
+export const defaultConnector = new MockWallet(accounts, {
+  id: "mock",
+  name: "Mock Connector",
+  available: true,
 });

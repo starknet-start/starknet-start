@@ -1,4 +1,15 @@
 import {
+  StandardEvents,
+  type StandardEventsListeners,
+} from "@starknet-io/get-starknet-core";
+import {
+  GetStarknetProvider,
+  type UseConnect,
+  useConnect as useGetStarknetConnect,
+  useStarknetProvider,
+} from "@starknet-io/get-starknet-modal";
+import { StarknetWalletApi } from "@starknet-io/get-starknet-wallet-standard/features";
+import {
   type Address,
   type Chain,
   mainnet,
@@ -11,122 +22,105 @@ import {
   type ChainPaymasterFactory,
 } from "@starknet-start/providers/paymaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type React from "react";
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useRef,
+  useMemo,
   useState,
 } from "react";
-import {
-  type AccountInterface,
-  constants,
-  type PaymasterRpc,
-  type ProviderInterface,
+import type {
+  AccountInterface,
+  PaymasterRpc,
+  ProviderInterface,
 } from "starknet";
-
-import type { Connector } from "../connectors";
-import type { ConnectorData } from "../connectors/base";
-import { ConnectorNotFoundError } from "../errors";
+import { constants, WalletAccountV5 } from "starknet";
 import { AccountProvider } from "./account";
+
+type Simplify<T> = { [K in keyof T]: T[K] } & {};
+
+type GetStarknetState = ReturnType<typeof useStarknetProvider>;
+type GetStarknetProviderProps = Parameters<typeof GetStarknetProvider>[0];
 
 const defaultQueryClient = new QueryClient();
 
-/** State of the Starknet context. */
-export interface StarknetState {
-  /** Connected connector. */
-  connector?: Connector;
-  /** Connect the given connector. */
-  connect: ({ connector }: { connector?: Connector }) => Promise<void>;
-  /** Disconnect the currently connected connector. */
-  disconnect: () => Promise<void>;
-  /** List of registered connectors. */
-  connectors: Connector[];
-  /** Current explorer factory. */
-  explorer?: ExplorerFactory;
-  /** Chains supported by the app. */
-  chains: Chain[];
-  /** Current chain. */
-  chain: Chain;
-  /** Current provider. */
-  provider: ProviderInterface;
-  /** Current paymaster provider */
-  paymasterProvider?: PaymasterRpc;
-  /** Error. */
-  error?: Error;
-}
+export type StarknetState = Simplify<
+  {
+    chains: Chain[];
+    chain: Chain;
+    explorer?: ExplorerFactory;
+    provider: ProviderInterface;
+    paymasterProvider?: PaymasterRpc;
+    error?: Error;
+  } & UseConnect &
+    GetStarknetState
+>;
 
 const StarknetContext = createContext<StarknetState | undefined>(undefined);
 
-/**
- * Returns the current Starknet context state.
- *
- * @remarks
- *
- * This hook should be used sparingly and will be deprecated.
- *
- * Use the following hooks:
- *
- *  - `account`: `useAccount`
- *  - `connect`, `disconnect`, `connectors`: `useConnectors`
- *
- * @example
- * This example shows how to access the Starknet provider.
- * ```tsx
- * function Component() {
- *   const { library } = useStarknet()
- *
- *   if (!library.provider) return <span>Account URL: {library.baseUrl}</span>
- *   return <span>Provider URL: {library.provider.baseUrl}</span>
- * }
- * ```
- */
-export function useStarknet(): StarknetState {
-  const state = useContext(StarknetContext);
-  if (!state) {
-    throw new Error(
-      "useStarknet must be used within a StarknetProvider or StarknetConfig",
-    );
-  }
-  return state;
-}
+export type StarknetProviderProps = Simplify<
+  StarknetProviderInnerProps &
+    Omit<GetStarknetProviderProps, "children"> & { children?: React.ReactNode }
+>;
 
-interface StarknetManagerState {
-  currentChain: Chain;
-  connectors: Connector[];
-  currentAddress?: Address;
-  currentProvider: ProviderInterface;
-  currentPaymasterProvider?: PaymasterRpc;
-  error?: Error;
-}
-
-interface UseStarknetManagerProps {
+type StarknetProviderInnerProps = {
+  /** Chains supported by the app. */
   chains: Chain[];
+  /** Provider to use. */
   provider: ChainProviderFactory;
-  paymasterProvider: ChainPaymasterFactory;
+  /** Paymaster provider to use. */
+  paymasterProvider?: ChainPaymasterFactory;
+  /** Explorer to use. */
   explorer?: ExplorerFactory;
-  connectors?: Connector[];
+  /** Connect the first available connector on page load. */
   autoConnect?: boolean;
+  /** React-query client to use. */
+  queryClient?: QueryClient;
+  /** Application. */
+  children?: React.ReactNode;
+  /** Default chain to use when wallet is not connected */
   defaultChainId?: bigint;
+};
+
+export function StarknetProvider(props: StarknetProviderProps) {
+  const { recommendedWallets, extraWallets, store, children, ...rest } = props;
+  return (
+    <GetStarknetProvider
+      extraWallets={extraWallets}
+      recommendedWallets={recommendedWallets}
+      store={store}
+    >
+      <StarknetProviderInner {...rest}>{children}</StarknetProviderInner>
+    </GetStarknetProvider>
+  );
 }
 
-function useStarknetManager({
+function StarknetProviderInner({
   chains,
   provider,
-  paymasterProvider,
-  explorer,
-  connectors = [],
-  autoConnect = false,
+  // autoConnect,
+  children,
   defaultChainId,
-}: UseStarknetManagerProps): StarknetState & {
-  account?: AccountInterface;
-  address?: Address;
-} {
+  explorer,
+  paymasterProvider,
+  queryClient,
+}: StarknetProviderInnerProps) {
+  const { connect, disconnect, isConnecting, isError, connected } =
+    useGetStarknetConnect();
+  const {
+    extraWallets,
+    injectedWallets,
+    onSelectedChange,
+    recommendedWallets,
+    wallets,
+    selected,
+  } = useStarknetProvider();
+
   const defaultChain = defaultChainId
     ? (chains.find((c) => c.id === defaultChainId) ?? chains[0])
     : chains[0];
+
   if (defaultChain === undefined) {
     throw new Error("Must provide at least one chain.");
   }
@@ -141,258 +135,198 @@ function useStarknetManager({
     seen.add(chain.id);
   }
 
-  const { chain: _, provider: defaultProvider } = providerForChain(
-    defaultChain,
-    provider,
+  const { provider: defaultProvider } = useMemo(
+    () => providerForChain(defaultChain, provider),
+    [defaultChain, provider],
+  );
+  const _paymasterProvider = useMemo(
+    () => paymasterProvider ?? avnuPaymasterProvider({}),
+    [paymasterProvider],
+  );
+  const { paymasterProvider: defaultPaymasterProvider } = useMemo(
+    () => paymasterProviderForChain(defaultChain, _paymasterProvider),
+    [defaultChain, _paymasterProvider],
   );
 
-  const { paymasterProvider: defaultPaymasterProvider } =
-    paymasterProviderForChain(defaultChain, paymasterProvider);
-
-  // The currently connected connector needs to be accessible from the
-  // event handler.
-  const connectorRef = useRef<Connector | undefined>(undefined);
-  const [state, setState] = useState<StarknetManagerState>({
-    currentChain: defaultChain,
-    currentProvider: defaultProvider,
-    currentPaymasterProvider: defaultPaymasterProvider,
-    connectors,
-  });
+  const [currentChain, setCurrentChain] = useState<Chain>(defaultChain);
+  const [currentProvider, setCurrentProvider] =
+    useState<ProviderInterface>(defaultProvider);
+  const [currentPaymasterProvider, setCurrentPaymasterProvider] = useState<
+    PaymasterRpc | undefined
+  >(defaultPaymasterProvider);
+  const [address, setAddress] = useState<Address | undefined>();
+  const [account, setAccount] = useState<AccountInterface | undefined>();
 
   const updateChainAndProvider = useCallback(
-    ({ chainId }: { chainId?: bigint }) => {
-      if (!chainId) return;
-      for (const chain of chains) {
-        if (chain.id === chainId) {
-          const { chain: newChain, provider: newProvider } = providerForChain(
-            chain,
-            provider,
-          );
-          const { paymasterProvider: newPaymasterProvider } =
-            paymasterProviderForChain(chain, paymasterProvider);
-          setState((state) => ({
-            ...state,
-            currentChain: newChain,
-            currentProvider: newProvider,
-            currentPaymasterProvider: newPaymasterProvider,
-          }));
-          return;
-        }
+    (chainId: bigint) => {
+      const targetChain = chains.find((c) => c.id === chainId);
+      if (!targetChain) {
+        return;
       }
+
+      const { provider: newProvider } = providerForChain(targetChain, provider);
+      const { paymasterProvider: newPaymasterProvider } =
+        paymasterProviderForChain(targetChain, _paymasterProvider);
+      setCurrentChain(targetChain);
+      setCurrentProvider(newProvider);
+      setCurrentPaymasterProvider(newPaymasterProvider);
     },
-    [chains, provider, paymasterProvider],
+    [chains, provider, _paymasterProvider],
   );
 
-  const handleConnectorChange = useCallback(
-    async ({ chainId, account: address }: ConnectorData) => {
-      if (chainId) {
-        updateChainAndProvider({ chainId });
-      }
+  const handleChange: StandardEventsListeners["change"] = useCallback(
+    (change) => {
+      if (change.accounts && change.accounts.length > 0) {
+        const account = change.accounts[0];
+        setAddress(account.address as Address);
 
-      if (address && connectorRef.current) {
-        setState((state) => ({
-          ...state,
-          currentAddress: address as Address,
-        }));
+        try {
+          const chainIdentifier = account.chains[0];
+          const parts = chainIdentifier.split(":");
+          const chainIdHex = parts[parts.length - 1];
+          const chainId = BigInt(chainIdHex);
+
+          updateChainAndProvider(chainId);
+        } catch (error) {
+          console.error("Failed to parse chain ID:", error);
+        }
       }
     },
     [updateChainAndProvider],
   );
 
-  // Dependencies intentionally omitted since we only want
-  // this executed when defaultChain is updated.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: want to execute only when defaultChain is updated
   useEffect(() => {
-    if (!connectorRef.current) {
-      // Only update currentChain if no wallet is connected
-      setState((state) => ({
-        ...state,
-        currentChain: defaultChain,
-        currentProvider: providerForChain(defaultChain, provider).provider,
-        currentPaymasterProvider: paymasterProviderForChain(
-          defaultChain,
-          paymasterProvider,
-        ).paymasterProvider,
-      }));
+    let cleanup: (() => void) | undefined;
+    if (connected) {
+      const walletAddress = connected.accounts?.[0]?.address as Address;
+      setAddress(walletAddress);
+
+      if (connected.accounts?.[0]?.chains?.[0]) {
+        try {
+          const chainIdentifier = connected.accounts[0].chains[0];
+          const parts = chainIdentifier.split(":");
+          const chainIdHex = parts[parts.length - 1];
+          const chainId = BigInt(chainIdHex);
+
+          let targetChainId: bigint;
+
+          if (defaultChainId) {
+            targetChainId = defaultChainId;
+          } else if (chains.length > 0) {
+            targetChainId = chains[0].id;
+          } else {
+            targetChainId = chainId;
+          }
+
+          if (chainId !== targetChainId) {
+            const targetChain = chains.find((c) => c.id === targetChainId);
+            if (targetChain) {
+              updateChainAndProvider(targetChainId);
+
+              const targetStarknetChainId = starknetChainId(targetChainId);
+              if (targetStarknetChainId) {
+                connected.features[StarknetWalletApi]
+                  .request({
+                    type: "wallet_switchStarknetChain",
+                    params: { chainId: targetStarknetChainId },
+                  })
+                  .catch((error: Error) => {
+                    console.warn(
+                      "Failed to switch wallet to target chain:",
+                      error,
+                    );
+                    updateChainAndProvider(chainId);
+                  });
+              }
+            } else {
+              updateChainAndProvider(chainId);
+            }
+          } else {
+            updateChainAndProvider(chainId);
+          }
+        } catch (error) {
+          console.error("Failed to parse chain ID:", error);
+        }
+      } else if (defaultChainId) {
+        updateChainAndProvider(defaultChainId);
+      } else if (chains.length > 0) {
+        updateChainAndProvider(chains[0].id);
+      }
+
+      cleanup = connected.features[StandardEvents].on("change", handleChange);
+    } else {
+      setAddress(undefined);
+      setAccount(undefined);
+      setCurrentChain(defaultChain);
+      setCurrentProvider(defaultProvider);
+      setCurrentPaymasterProvider(defaultPaymasterProvider);
     }
-  }, [defaultChain]);
 
-  const disconnect = useCallback(async () => {
-    setState((state) => ({
-      ...state,
-      currentAddress: undefined,
-      currentProvider: defaultProvider,
-      currentPaymasterProvider: defaultPaymasterProvider,
-      currentChain: defaultChain,
-    }));
-
-    if (autoConnect) {
-      localStorage.removeItem("lastUsedConnector");
-    }
-
-    if (!connectorRef.current) return;
-    connectorRef.current.off("change", handleConnectorChange);
-    connectorRef.current.off("disconnect", disconnect);
-
-    try {
-      await connectorRef.current.disconnect();
-    } catch {}
-    connectorRef.current = undefined;
+    return () => {
+      cleanup?.();
+    };
   }, [
-    autoConnect,
-    handleConnectorChange,
-    defaultProvider,
-    defaultPaymasterProvider,
     defaultChain,
+    defaultChainId,
+    defaultPaymasterProvider,
+    defaultProvider,
+    connected,
+    chains,
+    updateChainAndProvider,
+    handleChange,
   ]);
 
-  const connect = useCallback(
-    async ({ connector }: { connector?: Connector }) => {
-      if (!connector) {
-        throw new Error("Must provide a connector.");
-      }
-
-      const needsListenerSetup = connectorRef.current?.id !== connector.id;
-      if (needsListenerSetup) {
-        connectorRef.current?.off("change", handleConnectorChange);
-        connectorRef.current?.off("disconnect", disconnect);
-      }
-
-      try {
-        const { chainId, account: address } = await connector.connect({
-          chainIdHint: defaultChain.id,
-        });
-
-        if (address !== state.currentAddress) {
-          connectorRef.current = connector;
-
-          setState((state) => ({
-            ...state,
-            currentAddress: address as Address,
-          }));
-        }
-
-        if (autoConnect) {
-          localStorage.setItem("lastUsedConnector", connector.id);
-        }
-
-        if (needsListenerSetup) {
-          connector.on("change", handleConnectorChange);
-          connector.on("disconnect", disconnect);
-        }
-
-        updateChainAndProvider({ chainId });
-      } catch (err) {
-        setState((state) => ({
-          ...state,
-          error: new ConnectorNotFoundError(),
-        }));
-        throw err;
-      }
-    },
-    [
-      autoConnect,
-      state.currentAddress,
-      defaultChain.id,
-      handleConnectorChange,
-      updateChainAndProvider,
-      disconnect,
-    ],
-  );
-
-  // Dependencies intentionally omitted since we only want
-  // this executed once.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: want to execute only once
   useEffect(() => {
-    async function tryAutoConnect(connectors: Connector[]) {
-      const lastConnectedConnectorId =
-        localStorage.getItem("lastUsedConnector");
-      if (lastConnectedConnectorId === null) {
-        return;
-      }
-
-      const lastConnectedConnector = connectors.find(
-        (connector) => connector.id === lastConnectedConnectorId,
+    if (connected && address) {
+      setAccount(
+        new WalletAccountV5({
+          address,
+          provider: currentProvider,
+          walletProvider: connected,
+          paymaster: currentPaymasterProvider,
+        }),
       );
-      if (lastConnectedConnector === undefined) {
-        return;
-      }
-
-      try {
-        if (!(await lastConnectedConnector.ready())) {
-          // Not authorized anymore.
-          return;
-        }
-
-        connect({ connector: lastConnectedConnector });
-      } catch {
-        // no-op
-      }
     }
+  }, [connected, address, currentProvider, currentPaymasterProvider]);
 
-    if (autoConnect && !connectorRef.current) {
-      tryAutoConnect(connectors);
-    }
-  }, []);
-
-  return {
-    address: state.currentAddress,
-    provider: state.currentProvider,
-    paymasterProvider: state.currentPaymasterProvider,
-    chain: state.currentChain,
-    connector: connectorRef.current,
-    explorer,
+  const state: StarknetState = useMemo(() => {
+    return {
+      connect,
+      disconnect,
+      isConnecting,
+      isError,
+      connected,
+      chains,
+      chain: currentChain,
+      explorer,
+      provider: currentProvider,
+      paymasterProvider: currentPaymasterProvider,
+      error: undefined,
+      extraWallets,
+      injectedWallets,
+      onSelectedChange,
+      recommendedWallets,
+      wallets,
+      selected,
+    };
+  }, [
     connect,
     disconnect,
-    connectors,
+    isConnecting,
+    isError,
+    connected,
     chains,
-  };
-}
-
-/** Arguments for `StarknetProvider`. */
-export interface StarknetProviderProps {
-  /** Chains supported by the app. */
-  chains: Chain[];
-  /** Provider to use. */
-  provider: ChainProviderFactory;
-  /** Paymaster provider to use. */
-  paymasterProvider?: ChainPaymasterFactory;
-  /** List of connectors to use. */
-  connectors?: Connector[];
-  /** Explorer to use. */
-  explorer?: ExplorerFactory;
-  /** Connect the first available connector on page load. */
-  autoConnect?: boolean;
-  /** React-query client to use. */
-  queryClient?: QueryClient;
-  /** Application. */
-  children?: React.ReactNode;
-  /** Default chain to use when wallet is not connected */
-  defaultChainId?: bigint;
-}
-
-/** Root Starknet context provider. */
-export function StarknetProvider({
-  chains,
-  provider,
-  paymasterProvider,
-  connectors,
-  explorer,
-  autoConnect,
-  queryClient,
-  defaultChainId,
-  children,
-}: StarknetProviderProps): JSX.Element {
-  const _paymasterProvider = paymasterProvider ?? avnuPaymasterProvider({});
-  const { account, address, ...state } = useStarknetManager({
-    chains,
-    provider,
-    paymasterProvider: _paymasterProvider,
+    currentChain,
     explorer,
-    connectors,
-    autoConnect,
-    defaultChainId,
-  });
+    currentProvider,
+    currentPaymasterProvider,
+    extraWallets,
+    injectedWallets,
+    onSelectedChange,
+    recommendedWallets,
+    wallets,
+    selected,
+  ]);
 
   return (
     <QueryClientProvider client={queryClient ?? defaultQueryClient}>
@@ -405,6 +339,19 @@ export function StarknetProvider({
   );
 }
 
+export function useStarknet(): StarknetState {
+  const context = useContext(StarknetContext);
+  if (!context) {
+    throw new Error("useStarknet must be used within a StarknetProvider");
+  }
+  return context;
+}
+
+export function useStarknetManager() {
+  const { connect, disconnect } = useStarknet();
+  return { connect, disconnect };
+}
+
 function providerForChain(
   chain: Chain,
   factory: ChainProviderFactory,
@@ -413,7 +360,6 @@ function providerForChain(
   if (provider) {
     return { chain, provider };
   }
-
   throw new Error(`No provider found for chain ${chain.name}`);
 }
 
@@ -425,7 +371,6 @@ function paymasterProviderForChain(
   if (paymasterProvider) {
     return { chain, paymasterProvider };
   }
-
   throw new Error(`No paymaster provider found for chain ${chain.name}`);
 }
 

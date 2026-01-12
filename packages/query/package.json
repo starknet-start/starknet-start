@@ -15,13 +15,13 @@
     "src",
     "README.md"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     }
   },
   "scripts": {
@@ -35,12 +35,21 @@
     "format:check": "biome format .",
     "format": "biome format . --write"
   },
+  "peerDependencies": {
+    "starknet": "^9.1.1"
+  },
   "dependencies": {
+    "@starknet-io/get-starknet-core": "^5.0.0",
+    "@starknet-io/get-starknet-wallet-standard": "5.0.0",
+    "@starknet-io/types-js": "^0.7.10",
+    "@starknet-start/chains": "workspace:^",
+    "abi-wan-kanabi": "^2.2.4",
+    "viem": "^2.21.1"
   },
   "devDependencies": {
     "@starknet-start/typescript-config": "workspace:*",
     "rimraf": "^4.4.1",
-    "tsdown": "^0.15.6",
+    "tsdown": "^0.16.8",
     "vitest": "^1.6.1"
   }
 }

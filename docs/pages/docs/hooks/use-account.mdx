@@ -5,7 +5,7 @@ Access the currently connected account, if any.
 ## Usage
 
 ```ts twoslash
-import { useAccount } from "@starknet-react/core";
+import { useAccount } from "@starknet-start/react";
 
 const { address, status } = useAccount();
 ```
@@ -16,7 +16,7 @@ You can listen for the connection/disconnection events using the `useEffect` hoo
 
 ```ts twoslash
 import { useEffect } from "react";
-import { useAccount } from "@starknet-react/core";
+import { useAccount } from "@starknet-start/react";
 
 const { address, status } = useAccount();
 
@@ -26,61 +26,55 @@ useEffect(() => {
   } else if (status === "connected") {
     // on connect
   }
-}, [address, status])
+}, [address, status]);
 ```
 
 ## Returns
 
-### account
-
-* Type: `AccountInterface | undefined`
-
-The currently connected account.
-
 ### address
 
-* Type: `0x${string} | undefined`
+- Type: `0x${string} | undefined`
 
 The address of the currently connected account.
 
 ### connector
 
-* Type: `Connector | undefined`
+- Type: `Connector | undefined`
 
 The connector used to connect the account.
 
 ### chainId
 
-* Type: `bigint | undefined`
+- Type: `bigint | undefined`
 
 The account's chain id.
 
 ### status
 
-* Type: `"connected" | "disconnected" | "connecting" | "reconnecting"`
+- Type: `"connected" | "disconnected" | "connecting" | "reconnecting"`
 
 Account connection status.
 
 ### isConnecting
 
-* Type: `boolean | undefined`
+- Type: `boolean | undefined`
 
 Derived from `status`.
 
 ### isReconnecting
 
-* Type: `boolean | undefined`
+- Type: `boolean | undefined`
 
 Derived from `status`.
 
 ### isConnected
 
-* Type: `boolean | undefined`
+- Type: `boolean | undefined`
 
 Derived from `status`.
 
 ### isDisconnected
 
-* Type: `boolean | undefined`
+- Type: `boolean | undefined`
 
 Derived from `status`.

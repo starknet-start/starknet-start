@@ -15,20 +15,20 @@
     "src",
     "README.md"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     }
   },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
-    "test": "vitest",
+    "test": "vitest --fileParallelism=false",
     "test:ci": "vitest run",
     "lint": "biome check src",
     "lint:fix": "pnpm lint --write",
@@ -36,33 +36,41 @@
     "format": "biome format . --write"
   },
   "peerDependencies": {
-    "get-starknet-core": "^4.0.0",
-    "react": "^18.0",
-    "starknet": "^8.1.2"
+    "@starknet-io/get-starknet-core": ">=5.0.0",
+    "@starknet-io/get-starknet-modal": ">=5.0.0",
+    "@starknet-io/get-starknet-wallet-standard": "^5.0.0",
+    "react": ">=19.0.0",
+    "starknet": ">=9.0.0"
   },
   "devDependencies": {
+    "@starknet-io/get-starknet-core": "^5.0.0",
+    "@starknet-io/get-starknet-modal": "^5.0.0",
+    "@starknet-io/get-starknet-wallet-standard": "^5.0.0",
     "@starknet-start/typescript-config": "workspace:*",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^15.0.4",
-    "@types/react": "^18.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "jsdom": "^24.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^18.3.0",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@wallet-standard/features": "^1.1.0",
+    "jsdom": "^27.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "rimraf": "^4.1.2",
-    "starknet": "^8.1.2",
-    "tsdown": "^0.15.6",
-    "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^1.5.2"
+    "starknet": "^9.1.1",
+    "tsdown": "^0.16.8",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.15"
   },
   "dependencies": {
     "@starknet-io/types-js": "^0.7.10",
     "@starknet-start/chains": "workspace:^",
     "@starknet-start/explorers": "workspace:^",
     "@starknet-start/providers": "workspace:^",
+    "@starknet-start/query": "workspace:^",
     "@tanstack/react-query": "^5.25.0",
     "abi-wan-kanabi": "^2.2.4",
     "eventemitter3": "^5.0.1",
+    "lossless-json": "^4.3.0",
     "viem": "^2.21.1",
     "zod": "^3.22.4"
   }

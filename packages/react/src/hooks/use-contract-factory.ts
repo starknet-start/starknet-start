@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useStarknetAccount } from "src/context/account";
 import {
   type Abi,
   type CompiledContract,
@@ -7,8 +8,6 @@ import {
   type RawArgs,
   type UniversalDetails,
 } from "starknet";
-
-import { useAccount } from "./use-account";
 
 /** Arguments for `useContractFactory`. */
 export interface UseContractFactoryProps {
@@ -57,7 +56,7 @@ export function useContractFactory({
   classHash,
   abi,
 }: UseContractFactoryProps): UseContractFactoryResult {
-  const { account } = useAccount();
+  const { account } = useStarknetAccount();
 
   const deployContract = useCallback(
     async (options?: DeployContractOptions) => {

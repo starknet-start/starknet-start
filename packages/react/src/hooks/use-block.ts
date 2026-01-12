@@ -1,9 +1,5 @@
-import {
-  type BlockNumber,
-  BlockTag,
-  type GetBlockResponse,
-  type ProviderInterface,
-} from "starknet";
+import { blockQueryFn, blockQueryKey } from "@starknet-start/query";
+import { type BlockNumber, BlockTag, type GetBlockResponse } from "starknet";
 
 import { useStarknet } from "../context/starknet";
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
@@ -13,7 +9,7 @@ export type UseBlockProps = UseQueryProps<
   GetBlockResponse,
   Error,
   GetBlockResponse,
-  ReturnType<typeof queryKey>
+  ReturnType<typeof blockQueryKey>
 > & {
   /** Identifier for the block to fetch. */
   blockIdentifier?: BlockNumber;
@@ -36,22 +32,8 @@ export function useBlock({
 }: UseBlockProps = {}): UseBlockResult {
   const { provider } = useStarknet();
   return useQuery({
-    queryKey: queryKey({ blockIdentifier }),
-    queryFn: queryFn({ provider, blockIdentifier }),
+    queryKey: blockQueryKey({ blockIdentifier }),
+    queryFn: blockQueryFn({ provider, blockIdentifier }),
     ...props,
   });
-}
-
-function queryKey({ blockIdentifier }: { blockIdentifier: BlockNumber }) {
-  return [{ entity: "block", blockIdentifier }] as const;
-}
-
-function queryFn({
-  provider,
-  blockIdentifier,
-}: {
-  provider: ProviderInterface;
-  blockIdentifier: BlockNumber;
-}) {
-  return async () => await provider.getBlock(blockIdentifier);
 }

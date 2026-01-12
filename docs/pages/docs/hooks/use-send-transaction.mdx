@@ -15,7 +15,7 @@ import {
   useContract,
   useNetwork,
   useAccount,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import type { Abi } from "starknet";
 
 const abi = [
@@ -39,6 +39,7 @@ const abi = [
 
 const { address } = useAccount();
 const { chain } = useNetwork();
+
 const { contract } = useContract({ // [!code focus]
   abi, // [!code focus]
   address: chain.nativeCurrency.address, // [!code focus]

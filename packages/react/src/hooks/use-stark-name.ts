@@ -1,9 +1,7 @@
 import type { Address } from "@starknet-start/chains";
+import { starkNameQueryFn, starkNameQueryKey } from "@starknet-start/query";
 import { useMemo } from "react";
-import { Provider, type ProviderInterface } from "starknet";
-
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
-
 import { useNetwork } from "./use-network";
 import { useProvider } from "./use-provider";
 
@@ -12,7 +10,7 @@ export type StarkNameArgs = UseQueryProps<
   string,
   Error,
   string,
-  ReturnType<typeof queryKey>
+  ReturnType<typeof starkNameQueryKey>
 > & {
   /** Account address. */
   address?: Address;
@@ -48,41 +46,18 @@ export function useStarkName({
   );
 
   return useQuery({
-    queryKey: queryKey({ address, contract, network: chain.network }),
-    queryFn: queryFn({ address, contract, provider, network: chain.network }),
+    queryKey: starkNameQueryKey({
+      address,
+      contract,
+      network: chain.network,
+    }),
+    queryFn: starkNameQueryFn({
+      address,
+      contract,
+      provider,
+      network: chain.network,
+    }),
     enabled,
     ...props,
   });
 }
-
-function queryKey({
-  address,
-  contract,
-  network,
-}: {
-  address?: string;
-  contract?: string;
-  network?: string;
-}) {
-  return [{ entity: "starkName", address, contract, network }] as const;
-}
-
-function queryFn({
-  address,
-  contract,
-  provider,
-  network,
-}: StarkNameArgs & { provider: ProviderInterface; network: string }) {
-  return async () => {
-    if (!address) throw new Error("address is required");
-
-    const namingContract = contract ?? StarknetIdNamingContract[network];
-    const p = new Provider(provider);
-    return await p.getStarkName(address, namingContract);
-  };
-}
-
-const StarknetIdNamingContract: Record<string, string> = {
-  sepolia: "0x154bc2e1af9260b9e66af0e9c46fc757ff893b3ff6a85718a810baf1474",
-  mainnet: "0x6ac597f8116f886fa1c97a23fa4e08299975ecaf6b598873ca6792b9bbfb678",
-};

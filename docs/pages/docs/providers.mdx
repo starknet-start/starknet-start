@@ -19,9 +19,9 @@ of the providers below.
 
 At the moment, this provider uses the free RPC endpoints provided by:
 
- - Blast API
- - Lava
- - Nethermind
+- Blast API
+- Lava
+- Nethermind
 
 ### JSON-RPC
 
@@ -30,13 +30,13 @@ services not yet supported by Starknet React. The value returned by the `rpc`
 function is passed to the Starknet `RpcProvider` constructor.
 
 ```tsx twoslash
-import { jsonRpcProvider } from "@starknet-react/core";
-import { Chain } from "@starknet-react/chains";
+import { jsonRpcProvider } from "@starknet-start/providers";
+import { Chain } from "@starknet-start/chains";
 
 function rpc(chain: Chain) {
   return {
-    nodeUrl: `https://${chain.network}.example.org`
-  }
+    nodeUrl: `https://${chain.network}.example.org`,
+  };
 }
 
 const provider = jsonRpcProvider({ rpc });
@@ -47,7 +47,7 @@ const provider = jsonRpcProvider({ rpc });
 Create an Alchemy API key from the dashboard.
 
 ```ts twoslash
-import { alchemyProvider } from "@starknet-react/core";
+import { alchemyProvider } from "@starknet-start/providers";
 
 const apiKey = "your-api-key";
 const provider = alchemyProvider({ apiKey });
@@ -58,7 +58,7 @@ const provider = alchemyProvider({ apiKey });
 Create a Bast API key from the dashboard.
 
 ```ts twoslash
-import { blastProvider } from "@starknet-react/core";
+import { blastProvider } from "@starknet-start/providers";
 
 const apiKey = "your-api-key";
 const provider = blastProvider({ apiKey });
@@ -69,7 +69,7 @@ const provider = blastProvider({ apiKey });
 Create an Infura API key from the dashboard.
 
 ```ts twoslash
-import { infuraProvider } from "@starknet-react/core";
+import { infuraProvider } from "@starknet-start/providers";
 
 const apiKey = "your-api-key";
 const provider = infuraProvider({ apiKey });
@@ -80,32 +80,10 @@ const provider = infuraProvider({ apiKey });
 Create a Lava API key from the dashboard.
 
 ```ts twoslash
-import { lavaProvider } from "@starknet-react/core";
+import { lavaProvider } from "@starknet-start/providers";
 
 const apiKey = "your-api-key";
 const provider = lavaProvider({ apiKey });
-```
-
-### Nethermind
-
-Create a Nethermind API key from the dashboard.
-
-```ts twoslash
-import { nethermindProvider } from "@starknet-react/core";
-
-const apiKey = "your-api-key";
-const provider = nethermindProvider({ apiKey });
-```
-
-### Reddio
-
-Create a Reddio API key from the [dashboard](https://dashboard.reddio.com/).
-
-```ts twoslash
-import { reddioProvider } from "@starknet-react/core";
-
-const apiKey = "your-api-key";
-const provider = reddioProvider({ apiKey });
 ```
 
 ### Cartridge
@@ -113,7 +91,7 @@ const provider = reddioProvider({ apiKey });
 Cartridge offers a Starknet RPC provider.
 
 ```ts twoslash
-import { cartridgeProvider } from "@starknet-react/core";
+import { cartridgeProvider } from "@starknet-start/providers";
 
 const provider = cartridgeProvider();
 ```
@@ -123,7 +101,7 @@ const provider = cartridgeProvider();
 Create a Slot project from the [CLI](https://github.com/cartridge-gg/slot).
 
 ```ts twoslash
-import { slotProvider } from "@starknet-react/core";
+import { slotProvider } from "@starknet-start/providers";
 
 const projectId = "your-project-id";
 const provider = slotProvider({ projectId });

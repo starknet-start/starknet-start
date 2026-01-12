@@ -1,14 +1,11 @@
-import type { Address, Chain } from "@starknet-start/chains";
-import { useMemo } from "react";
+import type { Address } from "@starknet-start/chains";
 import {
-  type Abi,
-  type ArgsOrCalldata,
-  type BlockNumber,
-  BlockTag,
-  type CallResult,
-  type Contract,
-} from "starknet";
-
+  type CallQueryArgs,
+  callQueryFn,
+  callQueryKey,
+} from "@starknet-start/query";
+import { useMemo } from "react";
+import { type Abi, BlockTag, type CallResult, type Contract } from "starknet";
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
 import { useContract } from "./use-contract";
 import { useInvalidateOnBlock } from "./use-invalidate-on-block";
@@ -16,23 +13,10 @@ import { useNetwork } from "./use-network";
 
 const DEFAULT_FETCH_INTERVAL = 5_000;
 
-type CallArgs = {
-  /** The contract's function name. */
-  functionName: string;
-  /** Read arguments. */
-  args?: ArgsOrCalldata;
-  /** Block identifier used when performing call. */
-  blockIdentifier?: BlockNumber;
-  /** Parse arguments before passing to contract. @default true */
-  parseArgs?: boolean;
-  /** Parse result after calling contract. @default true */
-  parseResult?: boolean;
-};
-
-export type CallQueryKey = typeof queryKey;
+export type CallQueryKey = typeof callQueryKey;
 
 /** Options for `useCall`. */
-export type UseCallProps = CallArgs &
+export type UseCallProps = CallQueryArgs &
   UseQueryProps<CallResult, Error, CallResult, ReturnType<CallQueryKey>> & {
     /** The target contract's ABI. */
     abi?: Abi;
@@ -72,7 +56,7 @@ export function useCall({
 
   const queryKey_ = useMemo(
     () =>
-      queryKey({
+      callQueryKey({
         chain,
         contract: contract as Contract,
         functionName,
@@ -100,7 +84,7 @@ export function useCall({
 
   return useQuery({
     queryKey: queryKey_,
-    queryFn: queryFn({
+    queryFn: callQueryFn({
       contract: contract as Contract,
       functionName,
       args,
@@ -112,47 +96,4 @@ export function useCall({
     enabled,
     ...props,
   });
-}
-
-function queryKey({
-  chain,
-  contract,
-  functionName,
-  args,
-  blockIdentifier,
-}: { chain?: Chain; contract?: Contract } & CallArgs) {
-  return [
-    {
-      entity: "readContract",
-      chainId: chain?.name,
-      contract: contract?.address,
-      functionName,
-      args: JSON.stringify(args, (_, v) =>
-        typeof v === "bigint" ? v.toString(10) : v,
-      ),
-      blockIdentifier,
-    },
-  ] as const;
-}
-
-function queryFn({
-  contract,
-  functionName,
-  args,
-  blockIdentifier,
-  parseArgs = true,
-  parseResult = true,
-}: { contract?: Contract } & CallArgs) {
-  return async () => {
-    if (!contract) throw new Error("contract is required");
-    if (contract.functions[functionName] === undefined) {
-      throw new Error(`function ${functionName} not found in contract`);
-    }
-
-    return contract.call(functionName, args, {
-      parseRequest: parseArgs,
-      parseResponse: parseResult,
-      blockIdentifier,
-    });
-  };
 }

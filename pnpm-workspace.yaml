@@ -1,10 +1,12 @@
 packages:
-  - "packages/typescript-config"
-  - "packages/chains"
-  - "packages/explorers"
-  - "packages/providers"
-  - "packages/query"
-  - "packages/react"
-  # - "packages/create-starknet"
-  - "docs"
-  # - "!packages/create-starknet/src/**"
+  - packages/typescript-config
+  - packages/chains
+  - packages/explorers
+  - packages/providers
+  - packages/query
+  - packages/react
+  # - packages/vue
+  - docs
+
+onlyBuiltDependencies:
+  - esbuild

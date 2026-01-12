@@ -12,7 +12,7 @@ export function DemoContainer({
 }) {
   return (
     <StarknetProvider defaultChainId={defaultChainId}>
-      <div className="flex flex-col px-4 border border-primary rounded-xl">
+      <div className="flex flex-col px-4 border border-primary rounded-xl demo-container [&_pre]:overflow-auto">
         {hasWallet ? <WalletBar /> : null}
         <div className="py-4">{children}</div>
         {hasWallet ? (

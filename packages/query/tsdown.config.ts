@@ -6,4 +6,5 @@ export default defineConfig({
   dts: true,
   clean: true,
   format: ["esm"],
+  hash: false,
 });

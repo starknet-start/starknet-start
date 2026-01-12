@@ -3,7 +3,7 @@ import { renderHook, waitFor } from "../../test/react";
 
 import { useNonceForAddress } from "./use-nonce-for-address";
 
-describe.skip("useNonceForAddress", () => {
+describe("useNonceForAddress", () => {
   it("returns nonce for the given address", async () => {
     const { result } = renderHook(() =>
       useNonceForAddress({

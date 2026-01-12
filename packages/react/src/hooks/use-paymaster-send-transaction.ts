@@ -1,19 +1,22 @@
+import {
+  paymasterSendTransactionMutationFn,
+  paymasterSendTransactionMutationKey,
+} from "@starknet-start/query";
 import { useCallback } from "react";
+import { useStarknetAccount } from "src/context/account";
 import type {
-  AccountInterface,
   BigNumberish,
   Call,
   InvokeFunctionResponse,
   PaymasterDetails,
 } from "starknet";
 import { type UseMutationResult, useMutation } from "../query";
-import { useAccount } from "./use-account";
 
 export type UsePaymasterSendTransactionArgs = {
   /** List of smart contract calls to execute. */
   calls?: Call[];
   /** Paymaster details. */
-  options: PaymasterDetails;
+  options?: PaymasterDetails;
   /** Max fee in gas token. */
   maxFeeInGasToken?: BigNumberish;
 };
@@ -32,15 +35,19 @@ export function usePaymasterSendTransaction(
   props: UsePaymasterSendTransactionArgs,
 ): UsePaymasterSendTransactionResult {
   const { calls, options, maxFeeInGasToken, ...rest } = props;
-  const { account } = useAccount();
+  const { account } = useStarknetAccount();
 
   const { mutate, mutateAsync, ...result } = useMutation<
     InvokeFunctionResponse,
     Error,
     Call[]
   >({
-    mutationKey: mutationKey(calls || []),
-    mutationFn: mutationFn({ account, options, maxFeeInGasToken }),
+    mutationKey: paymasterSendTransactionMutationKey(calls || []),
+    mutationFn: paymasterSendTransactionMutationFn({
+      account,
+      options,
+      maxFeeInGasToken,
+    }),
     ...rest,
   });
 
@@ -62,29 +69,5 @@ export function usePaymasterSendTransaction(
     send,
     sendAsync,
     ...result,
-  };
-}
-
-function mutationKey(args: Call[]) {
-  return [{ entity: "paymaster_sendTransaction", calls: args }] as const;
-}
-
-function mutationFn({
-  account,
-  options,
-  maxFeeInGasToken,
-}: {
-  account?: AccountInterface;
-  options: PaymasterDetails;
-  maxFeeInGasToken?: BigNumberish;
-}) {
-  return async (calls: Call[]) => {
-    if (!account) throw new Error("account is required");
-    if (!calls || calls.length === 0) throw new Error("calls are required");
-    return account.executePaymasterTransaction(
-      calls,
-      options,
-      maxFeeInGasToken,
-    );
   };
 }

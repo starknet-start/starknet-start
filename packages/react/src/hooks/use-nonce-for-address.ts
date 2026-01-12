@@ -1,12 +1,9 @@
 import type { Address } from "@starknet-start/chains";
-
 import {
-  type BlockNumber,
-  BlockTag,
-  type Nonce,
-  type ProviderInterface,
-} from "starknet";
-
+  nonceForAddressQueryFn,
+  nonceForAddressQueryKey,
+} from "@starknet-start/query";
+import { type BlockNumber, BlockTag, type Nonce } from "starknet";
 import { useStarknet } from "../context/starknet";
 import { type UseQueryProps, type UseQueryResult, useQuery } from "../query";
 
@@ -15,10 +12,10 @@ export type UseNonceForAddressProps = UseQueryProps<
   Nonce,
   Error,
   Nonce,
-  ReturnType<typeof queryKey>
+  ReturnType<typeof nonceForAddressQueryKey>
 > & {
   /** Address to fetch nonce for. */
-  address: Address;
+  address?: Address;
   /** Identifier for the block to fetch. */
   blockIdentifier?: BlockNumber;
 };
@@ -37,33 +34,13 @@ export function useNonceForAddress({
   const { provider } = useStarknet();
 
   return useQuery({
-    queryKey: queryKey({ address, blockIdentifier }),
-    queryFn: queryFn({ address, provider, blockIdentifier }),
+    queryKey: nonceForAddressQueryKey({ address, blockIdentifier }),
+    queryFn: nonceForAddressQueryFn({
+      address,
+      provider,
+      blockIdentifier,
+    }),
+    enabled: props.enabled ?? !!address,
     ...props,
   });
-}
-
-function queryKey({
-  address,
-  blockIdentifier,
-}: {
-  address: Address;
-  blockIdentifier: BlockNumber;
-}) {
-  return [{ entity: "nonce", blockIdentifier, address }] as const;
-}
-
-function queryFn({
-  provider,
-  blockIdentifier,
-  address,
-}: {
-  provider: ProviderInterface;
-  address: Address;
-  blockIdentifier: BlockNumber;
-}) {
-  return async () => {
-    const nonce = await provider.getNonceForAddress(address, blockIdentifier);
-    return nonce;
-  };
 }

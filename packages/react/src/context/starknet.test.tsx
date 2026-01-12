@@ -2,86 +2,97 @@ import { devnet, mainnet } from "@starknet-start/chains";
 import { jsonRpcProvider } from "@starknet-start/providers";
 import { describe, expect, it } from "vitest";
 import { accounts, defaultConnector } from "../../test/devnet";
-import { act, renderHook } from "../../test/react";
-import type { MockConnector } from "../connectors";
-
+import { act, render, renderHook } from "../../test/react";
+import {
+  chainToWalletStandardChain,
+  type MockWallet,
+} from "../connectors/mock";
+import { useStarknetAccount } from "./account";
 import { StarknetProvider, useStarknet } from "./starknet";
+
+function useStarknetWithAccount() {
+  return {
+    useStarknetResult: useStarknet(),
+    useStarknetAccountResult: useStarknetAccount(),
+  };
+}
 
 describe("StarknetProvider", () => {
   it("defaults to the first chain", async () => {
-    const { result } = renderHook(() => useStarknet());
+    const { result } = renderHook(() => useStarknetWithAccount());
 
-    expect(result.current.chain.name).toEqual("Starknet Devnet");
-    expect(await result.current.provider.getChainId()).toEqual(
-      `0x${devnet.id.toString(16)}`,
+    expect(result.current.useStarknetResult.chain.name).toEqual(
+      "Starknet Devnet",
     );
+    expect(
+      await result.current.useStarknetResult.provider.getChainId(),
+    ).toEqual(`0x${devnet.id.toString(16)}`);
   });
 
   it("connects to a connector", async () => {
-    const { result } = renderHook(() => useStarknet());
+    const { result } = renderHook(() => useStarknetWithAccount());
 
-    expect(result.current.connector).toBeUndefined();
+    expect(result.current.useStarknetResult.connected).toBeUndefined();
 
     await act(async () => {
       defaultConnector.switchChain(devnet.id);
-      await result.current.connect({ connector: defaultConnector });
+      await result.current.useStarknetResult.connect(defaultConnector);
     });
 
-    expect(result.current.connector).toBeDefined();
+    expect(result.current.useStarknetResult.connected).toBeDefined();
   });
 
   it("updates the account when it changes", async () => {
-    const { result } = renderHook(() => useStarknet());
+    const { result } = renderHook(() => useStarknetWithAccount());
 
-    expect(result.current.connector).toBeUndefined();
+    expect(result.current.useStarknetResult.connected).toBeUndefined();
 
     await act(async () => {
       defaultConnector.switchChain(devnet.id);
-      await result.current.connect({ connector: defaultConnector });
+      await result.current.useStarknetResult.connect(defaultConnector);
     });
 
-    const account = await result.current.connector?.account(
-      result.current.provider,
-    );
+    const account = result.current.useStarknetAccountResult.account;
     expect(account?.address).toEqual(accounts.sepolia[0].address);
 
     await act(async () => {
-      (result.current.connector as MockConnector).switchAccount(1);
+      (result.current.useStarknetResult.connected as MockWallet)?.switchAccount(
+        1,
+      );
     });
 
-    const account2 = await result.current.connector?.account(
-      result.current.provider,
-    );
+    const account2 = result.current.useStarknetAccountResult.account;
     expect(account2?.address).toEqual(accounts.sepolia[1].address);
   });
 
   it("updates the chain and account when the chain changes", async () => {
-    const { result } = renderHook(() => useStarknet());
+    const { result } = renderHook(() => useStarknetWithAccount());
 
-    expect(result.current.connector).toBeUndefined();
+    expect(result.current.useStarknetResult.connected).toBeUndefined();
 
     await act(async () => {
       defaultConnector.switchChain(devnet.id);
-      await result.current.connect({ connector: defaultConnector });
+      await result.current.useStarknetResult.connect(defaultConnector);
     });
 
-    const account = await result.current.connector?.account(
-      result.current.provider,
-    );
+    const account = result.current.useStarknetAccountResult.account;
     expect(account?.address).toEqual(accounts.sepolia[0].address);
-    expect(await result.current.connector?.chainId()).toEqual(devnet.id);
-    expect(result.current.chain.id).toEqual(devnet.id);
+    expect(result.current.useStarknetResult.connected?.chains[0]).toEqual(
+      `starknet:0x${devnet.id.toString(16)}`,
+    );
+    expect(result.current.useStarknetResult.chain.id).toEqual(devnet.id);
 
     await act(async () => {
-      (result.current.connector as MockConnector).switchChain(mainnet.id);
+      (result.current.useStarknetResult.connected as MockWallet).switchChain(
+        mainnet.id,
+      );
     });
 
-    const account2 = await result.current.connector?.account(
-      result.current.provider,
-    );
+    const account2 = result.current.useStarknetAccountResult.account;
     expect(account2?.address).toEqual(accounts.mainnet[0].address);
-    expect(await result.current.connector?.chainId()).toEqual(mainnet.id);
-    expect(result.current.chain.id).toEqual(mainnet.id);
+    expect(result.current.useStarknetResult.connected?.chains[0]).toEqual(
+      chainToWalletStandardChain(mainnet),
+    );
   });
 
   it("fails if there is duplicated chain ids", async () => {
@@ -93,8 +104,12 @@ describe("StarknetProvider", () => {
     }
     const provider = jsonRpcProvider({ rpc });
 
-    expect(() => StarknetProvider({ provider, chains })).toThrowError(
-      "Duplicated chain id found",
-    );
+    expect(() =>
+      render(
+        <StarknetProvider chains={chains} provider={provider}>
+          <div></div>
+        </StarknetProvider>,
+      ),
+    ).toThrowError("Duplicated chain id found");
   });
 });

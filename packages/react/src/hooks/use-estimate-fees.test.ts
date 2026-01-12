@@ -19,10 +19,9 @@ function useEstimateFeesWithConnect() {
 
   const { address } = useAccount();
 
-  const calls =
-    contract && address
-      ? [contract.populate("transfer", [address, 1n])]
-      : undefined;
+  const calls = contract
+    ? [contract.populate("transfer", [address ?? "0x01", 1n])]
+    : undefined;
 
   return {
     estimateFees: useEstimateFees({ calls }),
@@ -31,7 +30,7 @@ function useEstimateFeesWithConnect() {
   };
 }
 
-describe.skip("useEstimateFees", () => {
+describe("useEstimateFees", () => {
   it("estimate sucessfull if account is connected", async () => {
     const { result } = renderHook(() => useEstimateFeesWithConnect());
 
@@ -43,6 +42,26 @@ describe.skip("useEstimateFees", () => {
 
     await waitFor(() => {
       expect(result.current.estimateFees.isSuccess).toBeTruthy();
+      expect(result.current.estimateFees.data).toMatchInlineSnapshot(`
+        {
+          "overall_fee": 2130048000000000n,
+          "resourceBounds": {
+            "l1_data_gas": {
+              "max_amount": 192n,
+              "max_price_per_unit": 1500000000n,
+            },
+            "l1_gas": {
+              "max_amount": 0n,
+              "max_price_per_unit": 1500000000n,
+            },
+            "l2_gas": {
+              "max_amount": 1419840n,
+              "max_price_per_unit": 1500000000n,
+            },
+          },
+          "unit": "FRI",
+        }
+      `);
     });
   });
 

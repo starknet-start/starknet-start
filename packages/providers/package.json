@@ -15,18 +15,18 @@
     "src",
     "README.md"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     },
     "./paymaster": {
-      "types": "./dist/paymaster/index.d.ts",
-      "import": "./dist/paymaster/index.js",
-      "default": "./dist/paymaster/index.js"
+      "types": "./dist/paymaster/index.d.mts",
+      "import": "./dist/paymaster/index.mjs",
+      "default": "./dist/paymaster/index.mjs"
     }
   },
   "scripts": {
@@ -42,12 +42,12 @@
   },
   "dependencies": {
     "@starknet-start/chains": "workspace:*",
-    "starknet": "^8.5.5"
+    "starknet": "^9.1.1"
   },
   "devDependencies": {
     "@starknet-start/typescript-config": "workspace:*",
     "rimraf": "^4.4.1",
-    "tsdown": "^0.15.6",
+    "tsdown": "^0.16.8",
     "vitest": "^1.6.1"
   }
 }

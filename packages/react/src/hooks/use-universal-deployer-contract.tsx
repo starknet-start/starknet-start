@@ -1,7 +1,8 @@
 import type { Address } from "@starknet-start/chains";
+import type { UseContractResult } from "@starknet-start/query";
 import type { Abi } from "abi-wan-kanabi";
 import type { ProviderInterface } from "starknet";
-import { type UseContractResult, useContract } from "./use-contract";
+import { useContract } from "./use-contract";
 
 export type UseUniversalDeployerContractProps = {
   /** UDC contract's address.

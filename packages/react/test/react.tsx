@@ -9,10 +9,8 @@ import {
   renderHook,
 } from "@testing-library/react";
 import type React from "react";
-
+import type { MockWalletOptions } from "../src/connectors/mock";
 import { StarknetConfig as OgStarknetConfig } from "../src/context";
-
-import type { MockConnectorOptions } from "../src";
 import { defaultConnector } from "./devnet";
 
 function rpc() {
@@ -26,16 +24,14 @@ function StarknetConfig({
   connectorOptions,
 }: {
   children: React.ReactNode;
-  connectorOptions?: Partial<MockConnectorOptions>;
+  connectorOptions?: Partial<MockWalletOptions>;
 }) {
   const chains = [devnet, mainnet];
   const provider = jsonRpcProvider({ rpc });
-  const connectors = [defaultConnector];
 
-  defaultConnector.options = {
-    ...defaultConnector.options,
-    ...connectorOptions,
-  };
+  if (connectorOptions) {
+    defaultConnector.updateOptions(connectorOptions);
+  }
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -49,7 +45,7 @@ function StarknetConfig({
     <OgStarknetConfig
       chains={chains}
       provider={provider}
-      connectors={connectors}
+      extraWallets={[defaultConnector]}
       queryClient={queryClient}
     >
       {children}
@@ -60,7 +56,7 @@ function StarknetConfig({
 function customRender(
   ui: React.ReactElement,
   options: Omit<RenderOptions, "wrapper"> & {
-    connectorOptions?: Partial<MockConnectorOptions>;
+    connectorOptions?: Partial<MockWalletOptions>;
   } = {},
 ): RenderResult {
   const { connectorOptions, ...renderOptions } = options;
@@ -77,7 +73,7 @@ function customRender(
 function customRenderHook<RenderResult, Props>(
   render: (initialProps: Props) => RenderResult,
   options: Omit<RenderHookOptions<Props>, "wrapper"> & {
-    connectorOptions?: Partial<MockConnectorOptions>;
+    connectorOptions?: Partial<MockWalletOptions>;
   } = {},
 ) {
   const { connectorOptions, hydrate, ...renderOptions } = options;

@@ -2,7 +2,7 @@
 
 Hook to send one or several transaction(s) to the network in a **Gasless**/**Gasfree** way using the Paymaster.
 
-Use this hook together with [`usePaymasterGasTokens`](/docs/hooks/use-paymaster-gas-tokens) to fetch supported gas tokens & [`usePaymasterEstimateFees`](/docs/hooks/use-paymaster-estimate-fees) to estimate 
+Use this hook together with [`usePaymasterGasTokens`](/docs/hooks/use-paymaster-gas-tokens) to fetch supported gas tokens & [`usePaymasterEstimateFees`](/docs/hooks/use-paymaster-estimate-fees) to estimate
 fees in gas token.
 
 ## Usage
@@ -10,25 +10,21 @@ fees in gas token.
 The following example shows how to transfer `$STRK` tokens to an address using `$USDC` as gas token.
 
 ```ts twoslash
-import { usePaymasterSendTransaction } from "@starknet-react/core";
+import { usePaymasterSendTransaction } from "@starknet-start/react";
 import { Call, FeeMode } from "starknet";
 
 const calls: Call[] = [
   {
     contractAddress: "STRK_SEPOLIA_ADDRESS",
     entrypoint: "transfer",
-    calldata: [
-      "recipient_address",
-      "0x1",
-      "0x0"
-    ],
+    calldata: ["recipient_address", "0x1", "0x0"],
   },
-]; 
+];
 
 const feeMode: FeeMode = {
-  mode: "default",// default or sponsored(need api-key)
-  gasToken: "USDC_SEPOLIA_ADDRESS",// mandatory if 'default'
-}
+  mode: "default", // default or sponsored(need api-key)
+  gasToken: "USDC_SEPOLIA_ADDRESS", // mandatory if 'default'
+};
 
 const { data, error } = usePaymasterSendTransaction({
   calls,

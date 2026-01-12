@@ -1,3 +1,7 @@
+import {
+  disconnectMutationFn,
+  disconnectMutationKey,
+} from "@starknet-start/query";
 import { useStarknet } from "../context/starknet";
 import {
   type UseMutationProps,
@@ -30,8 +34,8 @@ export function useDisconnect(
   const { disconnect, chain } = useStarknet();
 
   const { mutate, mutateAsync, ...result } = useMutation({
-    mutationKey: [{ entity: "disconnect", chainId: chain.name }],
-    mutationFn: disconnect,
+    mutationKey: disconnectMutationKey({ chainId: chain.name }),
+    mutationFn: disconnectMutationFn({ disconnect }),
     ...props,
   });
 

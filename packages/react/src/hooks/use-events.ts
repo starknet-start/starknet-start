@@ -1,12 +1,10 @@
 import type { Events } from "@starknet-io/types-js";
-import type { Address } from "@starknet-start/chains";
 import {
-  type BlockIdentifier as BlockIdentifier_,
-  BlockTag,
-  hash,
-  num,
-  type RpcProvider,
-} from "starknet";
+  type EventsQueryKeyParams,
+  eventsQueryFn,
+  eventsQueryKey,
+} from "@starknet-start/query";
+import type { RpcProvider } from "starknet";
 import {
   type UseInfiniteQueryProps,
   type UseInfiniteQueryResult,
@@ -14,36 +12,20 @@ import {
 } from "../query";
 import { useProvider } from "./use-provider";
 
-const DEFAULT_PAGE_SIZE = 5;
-
-type EventsType = Events;
-type BlockIdentifier = Exclude<BlockIdentifier_, bigint>;
-
 /** Arguments for `useEvents`. */
 export type UseEventsProps = UseInfiniteQueryProps<
-  EventsType,
+  Events,
   Error,
-  EventsType,
-  EventsType,
-  ReturnType<typeof queryKey>,
+  Events,
+  Events,
+  ReturnType<typeof eventsQueryKey>,
   string
-> & {
-  /** Filter events emitted by a specific contract address */
-  address?: Address;
-  // TODO: support complex/nested events, maybe add a `keys` parameter ?
-  /** Filter events using the event name, example: Transfer */
-  eventName?: string;
-  /** Start fetching events from this block */
-  fromBlock?: BlockIdentifier;
-  /** Stop fetching events at this block */
-  toBlock?: BlockIdentifier;
-  /** The number of events returned from each individual query */
-  pageSize?: number;
-};
+> &
+  EventsQueryKeyParams;
 
 /** Value returned from `useEvents`. */
 export type UseEventsResult = Omit<
-  UseInfiniteQueryResult<EventsType, string, Error>,
+  UseInfiniteQueryResult<Events, string, Error>,
   "fetchPreviousPage" | "isFetchingPreviousPage" | "hasPreviousPage"
 >;
 
@@ -65,95 +47,24 @@ export function useEvents({
   const { provider } = useProvider();
   const rpcProvider = provider as RpcProvider;
 
-  const keyFilter = eventName
-    ? [num.toHex(hash.starknetKeccak(eventName))]
-    : [];
-  const keys = [keyFilter];
-
-  const fromBlock = fromBlock_
-    ? blockIdentifierToBlockId(fromBlock_)
-    : undefined;
-
-  const toBlock = toBlock_ ? blockIdentifierToBlockId(toBlock_) : undefined;
-
-  const chunkSize = pageSize ? pageSize : DEFAULT_PAGE_SIZE;
-
-  const fetchEvents = async ({
-    pageParam,
-  }: {
-    pageParam?: string;
-  }): Promise<EventsType> => {
-    const res = await rpcProvider.getEvents({
-      from_block: fromBlock,
-      to_block: toBlock,
-      address: address,
-      keys: keys,
-      chunk_size: chunkSize,
-      continuation_token: pageParam === "0" ? undefined : pageParam,
-    });
-    return res;
-  };
-
   return useInfiniteQuery({
     // TODO: useMemo ?
-    queryKey: queryKey({
+    queryKey: eventsQueryKey({
       address,
       eventName,
       fromBlock: fromBlock_,
       toBlock: toBlock_,
       pageSize,
     }),
-    queryFn: fetchEvents,
+    queryFn: eventsQueryFn({
+      provider: rpcProvider,
+      address,
+      eventName,
+      fromBlock: fromBlock_,
+      toBlock: toBlock_,
+      pageSize,
+    }),
     initialPageParam: "0",
     getNextPageParam: (lastPage, _pages) => lastPage.continuation_token,
   });
-}
-
-function queryKey({
-  address,
-  eventName,
-  fromBlock,
-  toBlock,
-  pageSize,
-}: {
-  address?: Address;
-  eventName?: string;
-  fromBlock?: BlockIdentifier;
-  toBlock?: BlockIdentifier;
-  pageSize?: number;
-}) {
-  return [
-    {
-      entity: "events",
-      address,
-      eventName,
-      fromBlock,
-      toBlock,
-      pageSize,
-    },
-  ] as const;
-}
-
-// Function to transform a BlockIdentifier into a BLOCK_ID
-function blockIdentifierToBlockId(blockIdentifier: BlockIdentifier) {
-  if (blockIdentifier === null) {
-    return BlockTag.PRE_CONFIRMED; // null maps to 'pre_confirmed' in v8
-  }
-
-  if (typeof blockIdentifier === "number") {
-    return { block_number: blockIdentifier };
-  }
-
-  if (typeof blockIdentifier === "string") {
-    if (blockIdentifier === "latest" || blockIdentifier === "pending") {
-      return blockIdentifier as BlockTag; // BlockTag values map directly
-    }
-
-    // If it's a regular string, assume it's a block hash
-    return { block_hash: blockIdentifier };
-  }
-
-  throw new Error(
-    `Unsupported BlockIdentifier type: ${typeof blockIdentifier}`,
-  );
 }

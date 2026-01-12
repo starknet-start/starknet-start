@@ -13,7 +13,7 @@ The Universal Deployer Contract (UDC) is a utility contract that allows you to d
 First, import and use the `useUniversalDeployerContract` hook:
 
 ```tsx
-import { useUniversalDeployerContract } from "@starknet-react/core";
+import { useUniversalDeployerContract } from "@starknet-start/react";
 
 function YourComponent() {
   const { udc } = useUniversalDeployerContract();
@@ -30,7 +30,7 @@ Use `useSendTransaction` to prepare and execute the contract deployment. You'll 
 - `calldata`: Constructor arguments for your contract
 
 ```tsx
-import { useSendTransaction } from "@starknet-react/core";
+import { useSendTransaction } from "@starknet-start/react";
 import { CallData } from "starknet";
 
 function DeployContract() {
@@ -59,7 +59,7 @@ Here's a complete example showing how to deploy an ERC20 token:
 import {
   useUniversalDeployerContract,
   useSendTransaction,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import { CallData } from "starknet";
 
 function DeployERC20() {
