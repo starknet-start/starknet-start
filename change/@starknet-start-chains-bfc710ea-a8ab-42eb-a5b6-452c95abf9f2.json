@@ -1,7 +1,0 @@
-{
-  "type": "major",
-  "comment": "Rename package and update build dependencies.",
-  "packageName": "@starknet-start/chains",
-  "email": "jadejajaipal5@gmail.com",
-  "dependentChangeType": "patch"
-}
