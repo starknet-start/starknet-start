@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vocs dev",
     "typecheck": "tsc --noEmit",
-    "build": "vocs build",
+    "build": "vocs build -o dist",
     "preview": "vocs preview",
     "lint": "biome lint components",
     "lint:fix": "biome lint components --write",
