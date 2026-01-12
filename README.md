@@ -1,73 +1,19 @@
-# Starknet React
+# Starknet Start
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@starknet-react/core">
-    <img alt="@starknet-react/core" src="https://img.shields.io/npm/v/@starknet-react/core">
+  <a href="https://www.npmjs.com/package/@starknet-start/react">
+    <img alt="@starknet-start/react" src="https://img.shields.io/npm/v/@starknet-start/react">
   </a>
-  <a href="https://github.com/apibara/starknet-react/actions/workflows/release.yml">
-    <img alt="Release Status" src="https://img.shields.io/github/actions/workflow/status/apibara/starknet-react/build.yml">
+  <a href="https://github.com/starknet-start/starknet-start/actions/workflows/release.yml">
+    <img alt="Release Status" src="https://img.shields.io/github/actions/workflow/status/starknet-start/starknet-start/build.yml">
   </a>
-  <a href="https://www.github.com/apibara/starknet-react">
-    <img alt="MIT LICENSE" src="https://img.shields.io/github/license/apibara/starknet-react">
+  <a href="https://www.github.com/starknet-start/starknet-start">
+    <img alt="MIT LICENSE" src="https://img.shields.io/github/license/starknet-start/starknet-start">
   </a>
 </p>
 
-**Starknet React** is a collection of React hooks for Starknet. It is inspired by
+**Starknet Start** is a library to build Starknet applications in React and Vue. It is inspired by
 [wagmi](https://github.com/tmm/wagmi), powered by [starknet.js](https://github.com/0xs34n/starknet.js).
-
-## Documentation
-
-Documentation, including demos, [is available online](https://starknet-react.com/).
-
-## Getting Started
-
-1. Add `@starknet-react/chains` and `@starknet-react/core` to your dependencies.
-
-```shell
-pnpm add @starknet-react/chains @starknet-react/core
-```
-
-You also need to add `get-starknet-core` and `starknet` to your dependencies.
-
-```shell
-pnpm add get-starknet-core starknet
-```
-
-2. Wrap your app with `StarknetConfig`
-
-```typescript
-import { sepolia } from "@starknet-react/chains";
-import {
-  StarknetConfig,
-  publicProvider,
-  ready,
-  braavos,
-} from "@starknet-react/core";
-
-function App() {
-  const chains = [sepolia];
-  const provider = publicProvider();
-  const connectors = [braavos(), ready()];
-
-  return (
-    <StarknetConfig chains={chains} provider={provider} connectors={connectors}>
-      <YourApp />
-    </StarknetConfig>
-  );
-}
-```
-
-3. Access the hooks from your components.
-
-```typescript
-import { useAccount } from "@starknet-react/core";
-
-function YourComponent() {
-  const { address } = useAccount();
-
-  return <div>gm {address}</div>;
-}
-```
 
 ## License
 

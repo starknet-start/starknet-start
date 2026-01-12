@@ -13,10 +13,10 @@
     "@starknet-react/chains": "^5.0.2",
     "@starknet-react/core": "^5.0.2",
     "@tailwindcss/vite": "^4.1.11",
-    "get-starknet-core": "4.0.0",
+    "@starknet-io/get-starknet-core": "4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "starknet": "^8.5.3",
+    "starknet": "^9.1.1",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { usePaymasterGasTokens } from "@starknet-react/core";
+import { usePaymasterGasTokens } from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
 import { DemoContainer } from "../starknet";
 

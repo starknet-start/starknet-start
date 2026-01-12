@@ -1,4 +1,4 @@
-import { useNetwork, useReadContract } from "@starknet-react/core";
+import { useNetwork, useReadContract } from "@starknet-start/react";
 import { useState } from "react";
 import stringify from "safe-stable-stringify";
 import { BlockTag } from "starknet";

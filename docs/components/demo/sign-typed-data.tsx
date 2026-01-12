@@ -1,7 +1,7 @@
 import {
   type UseSignTypedDataArgs,
   useSignTypedData,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
 import { shortString } from "starknet";
 import { DemoContainer } from "../starknet";

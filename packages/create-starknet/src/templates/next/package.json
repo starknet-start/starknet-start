@@ -11,11 +11,11 @@
   "dependencies": {
     "@starknet-react/chains": "^5.0.2",
     "@starknet-react/core": "^5.0.2",
-    "get-starknet-core": "^4.0.0",
+    "@starknet-io/get-starknet-core": "next",
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "starknet": "^8.5.3"
+    "starknet": "^9.1.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

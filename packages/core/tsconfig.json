@@ -1,8 +1,0 @@
-{
-  "extends": "@starknet-react/typescript-config/react-library.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "rootDir": ".",
-    "outDir": "dist"
-  }
-}

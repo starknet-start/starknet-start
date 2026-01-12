@@ -1,0 +1,66 @@
+{
+  "name": "starknet-vue",
+  "version": "0.0.1-alpha.2",
+  "private": true,
+  "license": "MIT",
+  "repository": "apibara/starknet-react",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": "./src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "default": "./dist/index.js"
+      }
+    },
+    "files": [
+      "dist",
+      "src",
+      "README.md"
+    ]
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "lint": "biome check src",
+    "lint:fix": "pnpm lint --write",
+    "format:check": "biome format .",
+    "format": "biome format . --write"
+  },
+  "peerDependencies": {
+    "starknet": "^9.1.1",
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@starknet-io/get-starknet-core": "^4.0.6",
+    "@starknet-io/get-starknet-wallet-standard": "5.0.0-beta.0",
+    "@starknet-io/types-js": "^0.7.10",
+    "@starknet-start/chains": "workspace:^",
+    "@starknet-start/explorers": "workspace:^",
+    "@starknet-start/providers": "workspace:^",
+    "@starknet-start/query": "workspace:^",
+    "@tanstack/vue-query": "^5.25.0",
+    "abi-wan-kanabi": "^2.2.4",
+    "eventemitter3": "^5.0.1",
+    "viem": "^2.21.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@starknet-start/explorers": "workspace:^",
+    "@starknet-start/providers": "workspace:^",
+    "@starknet-start/query": "workspace:^",
+    "@starknet-start/typescript-config": "workspace:*",
+    "@vue/test-utils": "^2.4.6",
+    "rimraf": "^4.1.2",
+    "starknet": "^9.1.1",
+    "tsup": "^8.0.2",
+    "vitest": "^1.5.2",
+    "vue": "^3.4.0"
+  }
+}

@@ -8,7 +8,8 @@
         "useLiteralKeys": "off"
       },
       "correctness": {
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "useUniqueElementIds": "off"
       },
       "a11y": {
         "useAltText": "off",

@@ -40,6 +40,11 @@
         "^build"
       ]
     },
+    "typecheck": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
     "lint": {},
     "lint:fix": {},
     "format:check": {},

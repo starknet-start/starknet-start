@@ -1,0 +1,53 @@
+{
+  "name": "@starknet-start/providers",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "starknet-start/starknet-start",
+  "homepage": "https://www.starknet-react.com",
+  "keywords": [
+    "starknet",
+    "ethereum",
+    "l2"
+  ],
+  "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./paymaster": {
+      "types": "./dist/paymaster/index.d.mts",
+      "import": "./dist/paymaster/index.mjs",
+      "default": "./dist/paymaster/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "lint": "biome check src",
+    "lint:fix": "pnpm lint --write",
+    "format:check": "biome format .",
+    "format": "biome format . --write"
+  },
+  "dependencies": {
+    "@starknet-start/chains": "workspace:*",
+    "starknet": "^9.1.1"
+  },
+  "devDependencies": {
+    "@starknet-start/typescript-config": "workspace:*",
+    "rimraf": "^4.4.1",
+    "tsdown": "^0.16.8",
+    "vitest": "^1.6.1"
+  }
+}

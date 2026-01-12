@@ -1,5 +1,5 @@
 {
-  "extends": "@starknet-react/typescript-config/react-library.json",
+  "extends": "@starknet-start/typescript-config/react-library.json",
   "compilerOptions": {
     "outDir": "dist"
   },

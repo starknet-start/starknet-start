@@ -3,7 +3,7 @@ import {
   useContract,
   useNetwork,
   useSendTransaction,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
 import type { Abi } from "starknet";
 import { DemoContainer } from "../starknet";

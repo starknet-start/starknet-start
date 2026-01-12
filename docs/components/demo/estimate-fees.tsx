@@ -4,7 +4,7 @@ import {
   useContract,
   useEstimateFees,
   useNetwork,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
 import { DemoContainer } from "../starknet";
 

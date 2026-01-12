@@ -5,41 +5,38 @@ configure the block explorer used by the `useExplorer` hook.
 
 Starknet React ships with the following block explorers (in alphabetical order):
 
- - Cartridge Explorer
- - Starkscan
- - Viewblock
- - Voyager
+- Cartridge Explorer
+- Viewblock
+- Voyager
 
 ## The `Explorer` interface
 
 The `Explorer` interface is used to generate links to the block explorer.
 It provides the following properties and methods.
 
- - `name: string`: human-friendly explorer name.
- - `block({ hash?: string, number?: number }): string`: link to the specified
-   block, either by hash or number.
- - `transaction(hash: string): string`: link to the specified transaction.
- - `contract(address: string): string`: link to the specified contract.
- - `class(hash: string): string`: link to the specified class.
+- `name: string`: human-friendly explorer name.
+- `block({ hash?: string, number?: number }): string`: link to the specified
+  block, either by hash or number.
+- `transaction(hash: string): string`: link to the specified transaction.
+- `contract(address: string): string`: link to the specified contract.
+- `class(hash: string): string`: link to the specified class.
 
 ## Explorer factory
 
-`StarknetConfig` expects an __explorer factory__, that is a function with the
+`StarknetConfig` expects an **explorer factory**, that is a function with the
 following signature:
 
 ```ts
-
 type ExplorerFactory<T extends Explorer = Explorer> = (
-  chain: Chain,
+  chain: Chain
 ) => T | null;
 ```
 
 Starknet React ships with the following explorer factories:
 
- - `cartridge`
- - `starkscan`
- - `viewblock`
- - `voyager`
+- `cartridge`
+- `viewblock`
+- `voyager`
 
 ## `useExplorer` hook
 
@@ -47,10 +44,10 @@ You can get an instance of the current explorer already initialized for the curr
 using the `useExplorer` hook.
 
 ```tsx twoslash
-import { useExplorer } from "@starknet-react/core";
+import { useExplorer } from "@starknet-start/react";
 
 const explorer = useExplorer();
 
-const name = explorer.name
-const link = explorer.block({ number: 123 })
+const name = explorer.name;
+const link = explorer.block({ number: 123 });
 ```

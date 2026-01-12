@@ -1,16 +1,16 @@
+import { mainnet, sepolia } from "@starknet-start/chains";
 import {
   useAccount,
   useContract,
   useNetwork,
   usePaymasterEstimateFees,
   usePaymasterSendTransaction,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
+import { useMemo } from "react";
 import stringify from "safe-stable-stringify";
 import type { Abi, Call, FeeMode } from "starknet";
 import { DemoContainer } from "../starknet";
 import { Button } from "../ui/button";
-import { mainnet, sepolia } from "@starknet-react/chains";
-import { useMemo } from "react";
 
 const USDC_ADDRESS_PER_CHAIN: Record<string, string> = {
   [mainnet.name]:

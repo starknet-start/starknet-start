@@ -5,9 +5,9 @@ import {
   useSendTransaction,
   useSwitchChain,
   useUniversalDeployerContract,
-} from "@starknet-react/core";
+} from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
-import { constants, CallData } from "starknet";
+import { CallData, constants } from "starknet";
 import { erc20ClassAbi } from "../../lib/erc20_class_abi";
 import { DemoContainer } from "../starknet";
 import { Button } from "../ui/button";

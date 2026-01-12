@@ -41,7 +41,7 @@ export const mainnet = {
     },
     public: {
       http: [
-        "https://starknet-mainnet.public.blastapi.io/rpc/v0_8",
+        "https://starknet-mainnet.public.blastapi.io/rpc/v0_10",
         "https://rpc.starknet.lava.build",
       ],
     },
@@ -52,9 +52,7 @@ export const mainnet = {
     },
   },
   explorers: {
-    starkCompass: ["https://www.starkcompass.com"],
     cartridge: ["https://explorer.cartridge.gg"],
-    starkscan: ["https://starkscan.co"],
     viewblock: ["https://viewblock.io/starknet"],
     voyager: ["https://voyager.online"],
   },
@@ -96,7 +94,6 @@ export const sepolia = {
   },
   explorers: {
     cartridge: ["https://starknet-sepolia.explorer.cartridge.gg"],
-    starkscan: ["https://sepolia.starkscan.co"],
     voyager: ["https://sepolia.voyager.online"],
   },
 } as const satisfies Chain;

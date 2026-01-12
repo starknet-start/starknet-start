@@ -15,10 +15,10 @@ jobs:
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - uses: pnpm/action-setup@v4
         with:
-          version: 9.10.0
+          version: 10.18.0
       - name: Install dependencies
         run: pnpm install --strict-peer-dependencies=false --no-frozen-lockfile
       - name: Run build
@@ -27,7 +27,7 @@ jobs:
         run: |
           git config user.name "Capy Bot"
           git config user.email "capy-bot@apibara.com"
-          git remote set-url origin "https://${GIT_TOKEN}@github.com/apibara/starknet-react"
+          git remote set-url origin "https://${GIT_TOKEN}@github.com/starknet-start/starknet-start"
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       - name: Install dependencies

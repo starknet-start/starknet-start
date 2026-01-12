@@ -1,4 +1,4 @@
-import { useAccount, useBalance } from "@starknet-react/core";
+import { useAccount, useBalance } from "@starknet-start/react";
 import { DemoContainer } from "../starknet";
 
 function AccountBalance({ account }: { account: `0x${string}` }) {

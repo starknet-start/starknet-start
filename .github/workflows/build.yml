@@ -14,7 +14,7 @@ jobs:
   test:
     services:
       devnet:
-        image: shardlabs/starknet-devnet-rs:0.0.6-seed0
+        image: shardlabs/starknet-devnet-rs:0.7.0-seed0
         ports:
           - 5050:5050
     runs-on: ubuntu-latest
@@ -24,10 +24,10 @@ jobs:
       - name: Set Node version
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - uses: pnpm/action-setup@v4
         with:
-          version: 9.10.0
+          version: 10.18.0
       - name: Install dependencies
         run: pnpm install --strict-peer-dependencies=false --no-frozen-lockfile
       - name: Run check format
@@ -36,6 +36,8 @@ jobs:
         run: pnpm lint
       - name: Run build
         run: pnpm build
+      - name: Run typecheck
+        run: pnpm typecheck
       - name: Run test
         run: pnpm test:ci
       - name: Check change files

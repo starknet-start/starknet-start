@@ -1,8 +1,8 @@
 {
-  "name": "@starknet-react/chains",
-  "version": "5.0.3",
+  "name": "@starknet-start/chains",
+  "version": "0.0.0",
   "license": "MIT",
-  "repository": "apibara/starknet-react",
+  "repository": "starknet-start/starknet-start",
   "homepage": "https://www.starknet-react.com/",
   "keywords": [
     "starknet",
@@ -10,26 +10,23 @@
     "l2"
   ],
   "type": "module",
-  "main": "./src/index.ts",
-  "exports": "./src/index.ts",
-  "publishConfig": {
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "default": "./dist/index.js"
-      }
-    },
-    "files": [
-      "dist",
-      "src",
-      "README.md"
-    ]
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "lint": "biome check src",
     "lint:fix": "pnpm lint --write",
@@ -37,8 +34,9 @@
     "format": "biome format . --write"
   },
   "devDependencies": {
-    "@starknet-react/typescript-config": "workspace:*",
+    "@starknet-start/typescript-config": "workspace:*",
     "rimraf": "^4.1.2",
-    "tsup": "^8.0.2"
-  }
+    "tsdown": "^0.16.8"
+  },
+  "dependencies": {}
 }

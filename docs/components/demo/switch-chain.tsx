@@ -1,5 +1,5 @@
-import { sepolia } from "@starknet-react/chains";
-import { useNetwork, useSwitchChain } from "@starknet-react/core";
+import { sepolia } from "@starknet-start/chains";
+import { useNetwork, useSwitchChain } from "@starknet-start/react";
 import stringify from "safe-stable-stringify";
 import { constants } from "starknet";
 import { DemoContainer } from "../starknet";
@@ -28,7 +28,7 @@ function SwitchChainInner() {
     <div className="flex flex-col gap-4">
       <p>Current Chain:</p>
       <pre>
-        {chain.name} | {chain.id.toString()}
+        {chain.name} | {chain.id.toString()} | {chain.network}
       </pre>
 
       <p>Response</p>
