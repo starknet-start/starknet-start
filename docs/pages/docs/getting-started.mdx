@@ -5,7 +5,7 @@ import { constants } from "starknet";
 
 ## Overview
 
-Starknet React is a collection of React hooks for Starknet. It combines the following packages:
+Starknet Start is a collection of React hooks for Starknet. It combines the following packages:
 
 - [Tanstack Query](https://tanstack.com/query/latest) for data fetching.
 - [Starknet.js](https://www.starknetjs.com/) for interacting with Starknet.
@@ -22,11 +22,11 @@ Start by installing Starknet React.
 :::code-group
 
 ```bash [npm]
-npm add @starknet-react/chains @starknet-react/core
+npm add @starknet-start/chains @starknet-start/providers @starknet-start/react
 ```
 
 ```bash [pnpm]
-pnpm add @starknet-react/chains @starknet-react/core
+pnpm add @starknet-start/chains @starknet-start/providers @starknet-start/react
 ```
 
 :::
@@ -103,67 +103,3 @@ export default function RootLayout({
 
 You can now use the Starknet React hooks from any component wrapped by the root
 provider!
-
-### Using the Cartridge Controller
-
-The Cartridge Controller wallet is supported however, you need to install the
-`@cartridge/connector` package.
-
-:::code-group
-
-```bash [npm]
-npm i @cartridge/connector
-```
-
-```bash [pnpm]
-pnpm i @cartridge/connector
-```
-
-:::
-
-```tsx
-// TODO: This Code has to be updated as per get-starknet standards.
-"use client";
-import React, { useCallback } from "react";
-
-import { sepolia, mainnet } from "@starknet-react/chains";
-import {
-  StarknetConfig,
-  publicProvider,
-  ready,
-  braavos,
-  useInjectedConnectors,
-  voyager,
-  Connector,
-  jsonRpcProvider,
-  cartridgeProvider,
-} from "@starknet-react/core";
-
-import { ControllerConnector } from "@cartridge/connector";
-import { constants } from "starknet";
-
-const cartridgeConnector = new ControllerConnector({
-  chains: [
-    {
-      rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
-    },
-    {
-      rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
-    },
-  ],
-  defaultChainId: constants.StarknetChainId.SN_SEPOLIA,
-});
-
-export function StarknetProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <StarknetConfig
-      chains={[mainnet, sepolia]}
-      provider={cartridgeProvider()}
-      connectors={[cartridgeConnector]}
-      explorer={voyager}
-    >
-      {children}
-    </StarknetConfig>
-  );
-}
-```

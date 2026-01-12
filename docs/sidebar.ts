@@ -10,12 +10,8 @@ export const sidebar = {
           link: "/docs/getting-started",
         },
         {
-          text: "Upgrading to V6",
-          link: "/docs/upgrading-to-v6",
-        },
-        {
-          text: "Upgrading to V4",
-          link: "/docs/upgrading-to-v4",
+          text: "Migrating to Starknet Start",
+          link: "/docs/migrating-to-starknet-start",
         },
         {
           text: "StarknetConfig",
