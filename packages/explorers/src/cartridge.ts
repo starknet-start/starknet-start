@@ -1,7 +1,7 @@
 import type { Chain } from "@starknet-start/chains";
 import type { Explorer, ExplorerFactory } from "./explorer";
 
-// Define the StarkscanExplorer class that extends Explorer
+// Define the CartridgeExplorer class that extends Explorer
 export class CartridgeExplorer implements Explorer {
   public name = "Cartridge Explorer";
   private link: string;
@@ -27,7 +27,7 @@ export class CartridgeExplorer implements Explorer {
   }
 }
 
-// Define the starkscan factory function
+// Define the cartridge factory function
 export const cartridge: ExplorerFactory<CartridgeExplorer> = (chain: Chain) => {
   return new CartridgeExplorer(chain);
 };
