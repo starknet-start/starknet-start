@@ -46,6 +46,6 @@
     "vitest": "^4.0.15"
   },
   "peerDependencies": {
-    "starknet": "^9.4.2"
+    "starknet": "^10.0.2"
   }
 }

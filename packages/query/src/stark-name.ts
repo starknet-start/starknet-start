@@ -1,6 +1,6 @@
 import type { Address } from "@starknet-start/chains";
 
-import { Provider, type ProviderInterface } from "starknet";
+import { type ProviderInterface, StarknetIdImpl } from "starknet";
 
 export type StarkNameQueryKeyParams = {
   address?: string;
@@ -34,7 +34,6 @@ export function starkNameQueryFn({ address, contract, provider, network }: Stark
     if (!network) throw new Error("network is required");
 
     const namingContract = contract ?? StarknetIdNamingContract[network];
-    const p = new Provider(provider);
-    return await p.getStarkName(address as Address, namingContract);
+    return await StarknetIdImpl.getStarkName(provider, address as Address, namingContract);
   };
 }

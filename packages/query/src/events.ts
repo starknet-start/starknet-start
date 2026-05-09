@@ -70,9 +70,10 @@ function blockIdentifierToBlockId(blockIdentifier: BlockIdentifier) {
   }
 
   if (typeof blockIdentifier === "string") {
-    if (blockIdentifier === "latest" || blockIdentifier === "pending") {
-      return blockIdentifier as BlockTag;
-    }
+    if (blockIdentifier === "latest") return BlockTag.LATEST;
+    // "pending" was renamed to "pre_confirmed" in starknet RPC 0.9; accept both for compat.
+    if (blockIdentifier === "pending" || blockIdentifier === "pre_confirmed") return BlockTag.PRE_CONFIRMED;
+    if (blockIdentifier === "l1_accepted") return BlockTag.L1_ACCEPTED;
 
     return { block_hash: blockIdentifier };
   }

@@ -1,6 +1,6 @@
 import type { Address } from "@starknet-start/chains";
 
-import { CallData, Provider, type ProviderInterface, starknetId } from "starknet";
+import { type ProviderInterface, StarknetIdImpl } from "starknet";
 
 export type StarkAddressQueryKeyParams = {
   name?: string;
@@ -34,26 +34,10 @@ export function starkAddressQueryFn({ name, contract, provider, network }: Stark
     if (!network) throw new Error("network is required");
 
     const namingContract = contract ?? StarknetIdNamingContract[network];
-    const p = new Provider(provider);
-    const encodedDomain = encodeDomain(name);
-    const result = await p.callContract({
-      contractAddress: namingContract as string,
-      entrypoint: "domain_to_address",
-      calldata: CallData.compile({ domain: encodedDomain, hint: [] }),
-    });
+    const result = await StarknetIdImpl.getAddressFromStarkName(provider, name, namingContract);
 
-    if (BigInt(result[0]) === BigInt(0)) throw new Error("Address not found");
+    if (BigInt(result) === BigInt(0)) throw new Error("Address not found");
 
-    return result[0] as Address;
+    return result as Address;
   };
 }
-
-const encodeDomain = (domain: string): string[] => {
-  if (!domain) return ["0"];
-
-  const encoded = [];
-  for (const subdomain of domain.replace(".stark", "").split(".")) {
-    encoded.push(starknetId.useEncoded(subdomain).toString(10));
-  }
-  return encoded;
-};
