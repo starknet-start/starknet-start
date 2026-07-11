@@ -13,20 +13,23 @@
     "@starknet-io/get-starknet-core": "^5.0.0",
     "@starknet-io/get-starknet-modal": "^5.0.0",
     "@starknet-io/get-starknet-wallet-standard": "^5.0.0",
-    "@starknet-start/chains": "^1.0.1",
-    "@starknet-start/providers": "^1.0.1",
-    "@starknet-start/react": "^1.0.1",
+    "@starknet-start/chains": "2.0.0",
+    "@starknet-start/providers": "2.0.0",
+    "@starknet-start/react": "2.0.0",
     "next": "16.2.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "starknet": "^9.4.2"
+    "starknet": "10.0.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

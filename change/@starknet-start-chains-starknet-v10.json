@@ -1,0 +1,7 @@
+{
+  "type": "major",
+  "comment": "Release the coordinated Starknet.js v10 package set.",
+  "packageName": "@starknet-start/chains",
+  "email": "maintainers@starknet-start.dev",
+  "dependentChangeType": "major"
+}

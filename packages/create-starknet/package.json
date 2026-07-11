@@ -38,10 +38,13 @@
     "@starknet-start/typescript-config": "workspace:^",
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.11.18",
+    "@types/node": "^22.0.0",
     "@types/prompts": "2.0.1",
     "@types/validate-npm-package-name": "^4.0.0",
     "tsup": "^8.0.2",
     "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

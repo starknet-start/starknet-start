@@ -1,0 +1,7 @@
+{
+  "type": "major",
+  "comment": "BREAKING: require Starknet.js 10.0.2 and Node.js 22 or newer, and migrate Starknet ID queries to the v10 API.",
+  "packageName": "@starknet-start/query",
+  "email": "maintainers@starknet-start.dev",
+  "dependentChangeType": "major"
+}

@@ -17,16 +17,16 @@
     "@starknet-io/get-starknet-core": "^5.0.0",
     "@starknet-io/get-starknet-modal": "^5.0.0",
     "@starknet-io/get-starknet-wallet-standard": "^5.0.0",
-    "@starknet-start/chains": "^1.0.1",
-    "@starknet-start/providers": "^1.0.1",
-    "@starknet-start/react": "^1.0.1",
+    "@starknet-start/chains": "2.0.0",
+    "@starknet-start/providers": "2.0.0",
+    "@starknet-start/react": "2.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-router": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "starknet": "^9.4.2",
+    "starknet": "10.0.2",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
@@ -37,6 +37,9 @@
     "typescript": "^5.7.2",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

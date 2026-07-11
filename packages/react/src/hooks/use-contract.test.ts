@@ -208,6 +208,7 @@ describe("useContract", () => {
             "name": [Function],
           },
           "classHash": undefined,
+          "defaultProvider": undefined,
           "estimateFee": {
             "name": [Function],
           },
@@ -222,17 +223,17 @@ describe("useContract", () => {
           "populateTransaction": {
             "name": [Function],
           },
-          "providerOrAccount": RpcProvider2 {
+          "providerOrAccount": RpcProvider {
             "channel": RpcChannel2 {
               "baseFetch": [Function],
               "batchClient": undefined,
               "blockIdentifier": "latest",
               "chainId": "0x534e5f5345504f4c4941",
-              "channelSpecVersion": "0.10.0",
+              "channelSpecVersion": "0.10.2",
               "headers": {
                 "Content-Type": "application/json",
               },
-              "id": "RPC0.10.0",
+              "id": "RPC0.10.2",
               "nodeUrl": "http://localhost:5050/rpc",
               "requestId": 0,
               "retries": 200,
@@ -240,7 +241,34 @@ describe("useContract", () => {
               "transactionRetryIntervalFallback": 5000,
               "waitMode": false,
             },
+            "fastWaitForTransaction": [Function],
+            "getAddressFromBrotherName": [Function],
+            "getAddressFromStarkName": [Function],
+            "getBrotherName": [Function],
+            "getBrotherProfile": [Function],
+            "getStarkName": [Function],
+            "getStarkProfile": [Function],
             "getStateUpdate": [Function],
+            "pluginManager": PluginManager {
+              "accountHooksList": [],
+              "providerHooksList": [],
+              "registeredPlugins": Map {
+                "starknet-id" => {
+                  "accountExtend": [Function],
+                  "extend": [Function],
+                  "name": "starknet-id",
+                },
+                "brother-id" => {
+                  "extend": [Function],
+                  "name": "brother-id",
+                },
+                "fast-execute" => {
+                  "accountExtend": [Function],
+                  "extend": [Function],
+                  "name": "fast-execute",
+                },
+              },
+            },
             "responseParser": RPCResponseParser {
               "resourceBoundsOverhead": undefined,
             },

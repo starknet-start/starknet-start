@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Generate Node.js 22 applications pinned to Starknet.js 10.0.2.",
+  "packageName": "create-starknet",
+  "email": "maintainers@starknet-start.dev",
+  "dependentChangeType": "patch"
+}

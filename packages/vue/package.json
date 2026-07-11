@@ -51,13 +51,16 @@
     "@starknet-start/typescript-config": "workspace:^",
     "@vue/test-utils": "^2.4.6",
     "rimraf": "^4.1.2",
-    "starknet": "^9.4.2",
+    "starknet": "10.0.2",
     "tsup": "^8.0.2",
     "vitest": "^4.0.15",
     "vue": "^3.4.0"
   },
   "peerDependencies": {
-    "starknet": "^9.4.2",
+    "starknet": "10.0.2",
     "vue": "^3.4.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

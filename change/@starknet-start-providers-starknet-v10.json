@@ -1,0 +1,7 @@
+{
+  "type": "major",
+  "comment": "BREAKING: require Starknet.js 10.0.2 and Node.js 22 or newer.",
+  "packageName": "@starknet-start/providers",
+  "email": "maintainers@starknet-start.dev",
+  "dependentChangeType": "major"
+}
