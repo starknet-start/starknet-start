@@ -1,9 +1,10 @@
 {
-  "extends": "@starknet-react/typescript-config/base.json",
+  "extends": "@starknet-start/typescript-config/base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
