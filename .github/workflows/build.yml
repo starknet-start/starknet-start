@@ -39,7 +39,7 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: pnpm install --strict-peer-dependencies=false --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Run check format
         run: pnpm format:check
       - name: Run lint
